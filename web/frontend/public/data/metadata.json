@@ -1,0 +1,88 @@
+{
+  "project_name": "Madurai Groundwater Intelligence",
+  "subtitle": "Historical Analysis, Forecasting & Spatial Risk Assessment",
+  "study_area": "Madurai District, Tamil Nadu, India",
+  "taluks_count": 7,
+  "taluks": [
+    "Madurai North",
+    "Madurai South",
+    "Melur",
+    "Peraiyur",
+    "Thirumangalam",
+    "Usilampatti",
+    "Vadipatti"
+  ],
+  "historical_period": "2007\u20132021",
+  "historical_records_count": 2059,
+  "monitoring_wells_count": 166,
+  "unique_villages_count": 154,
+  "forecast_period": "2022\u20132030",
+  "forecast_records_count": 1386,
+  "parameters": [
+    {
+      "name": "TDS",
+      "long_name": "Total Dissolved Solids",
+      "unit": "mg/L",
+      "desirable_limit": 500.0,
+      "permissible_limit": 2000.0,
+      "description": "Mineral content indicator under BIS 10500:2012"
+    },
+    {
+      "name": "EC",
+      "long_name": "Electrical Conductivity",
+      "unit": "\u00b5S/cm",
+      "desirable_limit": 750.0,
+      "permissible_limit": 2250.0,
+      "description": "Salinity hazard indicator under CPCB / FAO guidelines"
+    },
+    {
+      "name": "Fluoride",
+      "long_name": "Fluoride (F)",
+      "unit": "mg/L",
+      "desirable_limit": 1.0,
+      "permissible_limit": 1.5,
+      "description": "Dental & skeletal fluorosis hazard under BIS 10500:2012"
+    },
+    {
+      "name": "pH",
+      "long_name": "Hydrogen Ion Potential",
+      "unit": "dimensionless",
+      "min_limit": 6.5,
+      "max_limit": 8.5,
+      "description": "Acid-base neutrality scale under BIS 10500:2012"
+    }
+  ],
+  "risk_screening_categories": [
+    {
+      "category": "High Risk",
+      "color": "#DC2626",
+      "criteria": "Point prediction exceeds upper permissible screening threshold"
+    },
+    {
+      "category": "Medium Risk (Borderline)",
+      "color": "#D97706",
+      "criteria": "Point prediction permissible, but uncertainty upper/lower bounds breach threshold"
+    },
+    {
+      "category": "Medium Risk (Permissible)",
+      "color": "#3B82F6",
+      "criteria": "Point prediction or interval spans relaxation range (In absence of alternate source)"
+    },
+    {
+      "category": "Low Risk",
+      "color": "#10B981",
+      "criteria": "Point prediction AND all relevant prediction bounds strictly within desirable limits"
+    },
+    {
+      "category": "Insufficient Data",
+      "color": "#94A3B8",
+      "criteria": "Missing or non-finite parameter/uncertainty data"
+    }
+  ],
+  "sources": [
+    "Tamil Nadu Water Supply and Drainage Board (TWAD Board)",
+    "Central Ground Water Board (CGWB), South Eastern Coastal Region",
+    "Public Works Department (Water Resources Department), Govt. of Tamil Nadu"
+  ],
+  "disclaimer": "Forecast-based groundwater quality screening tool for environmental research and decision support. Not a certification of potability. Official potability requires comprehensive certified laboratory testing including microbiology, heavy metals, and pesticides."
+}

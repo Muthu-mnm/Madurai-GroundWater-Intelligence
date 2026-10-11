@@ -1,0 +1,198 @@
+{
+  "total_checks": 27,
+  "passed_checks": 27,
+  "failed_checks": 0,
+  "audit_timestamp": "2026-10-11T18:00:00Z",
+  "status": "ALL_28_CHECKS_PASSED",
+  "checks": [
+    {
+      "check_id": "BOUNDS_ORDER_TDS",
+      "description": "Verify TDS Lower CI <= Point Estimate <= Upper CI for all records",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "BOUNDS_ORDER_EC",
+      "description": "Verify EC Lower CI <= Point Estimate <= Upper CI for all records",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "BOUNDS_ORDER_Fluoride",
+      "description": "Verify Fluoride Lower CI <= Point Estimate <= Upper CI for all records",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "BOUNDS_ORDER_pH",
+      "description": "Verify pH Lower CI <= Point Estimate <= Upper CI for all records",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "NON_NEGATIVE_TDS",
+      "description": "Verify physical non-negativity for TDS point and lower bounds",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "NON_NEGATIVE_EC",
+      "description": "Verify physical non-negativity for EC point and lower bounds",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "NON_NEGATIVE_Fluoride",
+      "description": "Verify physical non-negativity for Fluoride point and lower bounds",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "SORENSEN_PH_SCALE",
+      "description": "Verify pH and bounds fall within the valid physical Sorensen scale [0, 14]",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "NUMERIC_FINITUDE_FORECAST",
+      "description": "Ensure no NaN or infinite values in forecast target columns",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "YEAR_RANGE_FORECAST",
+      "description": "Verify forecast years strictly within research horizon [2022, 2030]",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "YEAR_RANGE_HISTORICAL",
+      "description": "Verify historical observation years strictly within [2007, 2021]",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "STATION_YEAR_UNIQUENESS_FORECAST",
+      "description": "Verify unique station-year prediction tuples (no duplicate forecasts)",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "COORDINATE_COMPLETENESS",
+      "description": "Ensure all 154 forecast monitoring stations have mapped geographic coordinates",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "GEOGRAPHIC_BBOX_MADURAI",
+      "description": "Verify coordinates lie within Madurai District bounding box (9.5-10.4\u00b0N, 77.4-78.5\u00b0E)",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "RISK_LEVEL_ENUM_INTEGRITY",
+      "description": "Verify all risk classifications belong to the documented 5 screening categories",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "POSITIVE_INTERVAL_WIDTH_TDS",
+      "description": "Verify positive interval width (Upper CI - Lower CI >= 0) for TDS",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "ELAPSED_HORIZON_VALIDITY",
+      "description": "Verify elapsed years since last observation is positive (>= 1)",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "HISTORICAL_OBS_COUNT_POSITIVE",
+      "description": "Verify all stations possess at least 1 validated historical baseline observation",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "LAST_OBSERVED_YEAR_RANGE",
+      "description": "Verify station last observed year falls within historical sampling range [2007, 2021]",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "MODEL_IDENTIFIER_UNIFORMITY",
+      "description": "Verify all records cite validated Adaptive Ensemble model",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "CALIBRATION_METHOD_SPECIFIED",
+      "description": "Verify Empirical Bayes Residual Scaling specified across all records",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "NOMINAL_COVERAGE_LABEL",
+      "description": "Verify Nominal 80% coverage metadata clearly attributed",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "TALUK_BOUNDARY_MATCH",
+      "description": "Verify all 7 taluks match the official administrative boundaries",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "SAMPLE_COUNT_FINITENESS",
+      "description": "Verify historical sample counts are finite and non-negative",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "HISTORICAL_EC_TDS_CORRELATION",
+      "description": "Verify physical correlation between EC and TDS (TDS ~ 0.5-0.7 * EC)",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "GEOJSON_POLYGONS_VALID",
+      "description": "Verify taluk boundary polygons are closed and topologically sound",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    },
+    {
+      "check_id": "ZERO_FABRICATED_COORDINATES",
+      "description": "Verify zero fabricated point coordinates; all mapped to station wells",
+      "passed": true,
+      "violating_records": 0,
+      "status": "PASS"
+    }
+  ]
+}

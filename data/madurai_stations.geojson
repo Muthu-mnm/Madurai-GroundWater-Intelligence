@@ -1,0 +1,2931 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai East",
+        "Village": "Varichiur",
+        "Well_No": "501003",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.25,
+          9.91
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Chatrapatti",
+        "Well_No": "21075",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2016,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.15,
+          10.03
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Chettikulam",
+        "Well_No": "21074",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.15,
+          9.99
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Chithakur",
+        "Well_No": "501005",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.24,
+          9.95
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Elamanur",
+        "Well_No": "21081",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.21,
+          9.9
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Elangiyendal",
+        "Well_No": "21077",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.16,
+          9.98
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Elanthgiyendal",
+        "Well_No": "HP 21077",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.23,
+          9.95
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Erukalnatham",
+        "Well_No": "MWS21063",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.17,
+          10.01
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Erukkalanatham",
+        "Well_No": "21063",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.08,
+          9.96
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Kadavur",
+        "Well_No": "83099",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.18,
+          10.07
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Kalikappan",
+        "Well_No": "21078",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.19,
+          9.94
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Kalimangalam",
+        "Well_No": "21080",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.24,
+          9.88
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Karupayoorani",
+        "Well_No": "21010D",
+        "Historical_Observations": 12,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.18,
+          9.93
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Karuppayi Urani",
+        "Well_No": "83075",
+        "Historical_Observations": 1,
+        "Last_Observed_Year": 2017,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.18,
+          9.93
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Kochadai",
+        "Well_No": "81001B",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.08,
+          9.94
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Koolapandi",
+        "Well_No": "21036D",
+        "Historical_Observations": 10,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.15,
+          10.01
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Madurai North",
+        "Well_No": "21035D",
+        "Historical_Observations": 13,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.14,
+          9.84
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Mangulam",
+        "Well_No": "21065",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.25,
+          10.04
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Oomachikulam",
+        "Well_No": "501001",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.15,
+          10.01
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Oomatchikulam",
+        "Well_No": "501001",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.15,
+          10.01
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Poigaikaraipatti",
+        "Well_No": "501006",
+        "Historical_Observations": 2,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.2,
+          10.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Poikaraipatti",
+        "Well_No": "501006",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2016,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.2,
+          10.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Rajakkoor",
+        "Well_No": "HP 21079",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.24,
+          9.93
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Rajakkur",
+        "Well_No": "21079",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.24,
+          9.93
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Sakkudi",
+        "Well_No": "501004",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.22,
+          9.86
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Samayanallur",
+        "Well_No": "501033",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.04,
+          9.98
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Varichiyur",
+        "Well_No": "21025D",
+        "Historical_Observations": 13,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.26,
+          9.91
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Vayalur",
+        "Well_No": "21076",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.05,
+          10.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Velliankundram",
+        "Well_No": "501007",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.18,
+          10.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai North",
+        "Village": "Velliyankundram",
+        "Well_No": "501007",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.18,
+          10.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Eliyarpatti",
+        "Well_No": "21005D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.09,
+          9.79
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Kilakuilkudi",
+        "Well_No": "21014D",
+        "Historical_Observations": 7,
+        "Last_Observed_Year": 2013,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.06,
+          9.93
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Kochadai",
+        "Well_No": "81001B",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.08,
+          9.94
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Melakuilkudi",
+        "Well_No": "501011",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.04,
+          9.92
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Melakuyilkudi",
+        "Well_No": "501011",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.04,
+          9.92
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Melamathur",
+        "Well_No": "21008D",
+        "Historical_Observations": 10,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.01,
+          9.97
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Nallur",
+        "Well_No": "21082",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.13,
+          9.79
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Nedunkulam",
+        "Well_No": "501035",
+        "Historical_Observations": 7,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.18,
+          9.79
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Nilaiyur",
+        "Well_No": "21083",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.06,
+          9.86
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Othai Alangulam",
+        "Well_No": "501036",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.06,
+          9.81
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Othai Alankulam",
+        "Well_No": "501036",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.06,
+          9.81
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Sakkilipatti",
+        "Well_No": "21084",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.01,
+          9.9
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Thiruparankundram",
+        "Well_No": "21001D",
+        "Historical_Observations": 13,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.1,
+          9.88
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Thirupparankundram",
+        "Well_No": "21001D",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.11,
+          9.88
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Tiruparankundram",
+        "Well_No": "83005",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.11,
+          9.88
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Vilacherry",
+        "Well_No": "501012",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.06,
+          9.9
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Madurai South",
+        "Village": "Vilachery",
+        "Well_No": "501012",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.06,
+          9.9
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Ambalakkaranpatti",
+        "Well_No": "501014",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.4,
+          9.97
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Athipatti",
+        "Well_No": "21021D",
+        "Historical_Observations": 7,
+        "Last_Observed_Year": 2013,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.39,
+          10.09
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Attukulam",
+        "Well_No": "21066",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.36,
+          10.0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Chittampatti",
+        "Well_No": "83016A",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.24,
+          9.99
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Karungalakudi",
+        "Well_No": "21019D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.37,
+          10.16
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Kasampatti",
+        "Well_No": "501019",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.3,
+          10.15
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Keelaiyur",
+        "Well_No": "501017",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.38,
+          10.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Keelayur",
+        "Well_No": "501017",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.38,
+          10.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Kottampatti",
+        "Well_No": "83506",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2013,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.33,
+          10.16
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Kuruchipatti",
+        "Well_No": "501015",
+        "Historical_Observations": 1,
+        "Last_Observed_Year": 2017,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.36,
+          10.08
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Manappacheri",
+        "Well_No": "501018",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2016,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.35,
+          10.22
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Melapathinettangudi",
+        "Well_No": "83078",
+        "Historical_Observations": 1,
+        "Last_Observed_Year": 2017,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.35,
+          10.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Navinipatti",
+        "Well_No": "501016",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.36,
+          10.04
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Pallapatti",
+        "Well_No": "21020D",
+        "Historical_Observations": 13,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.39,
+          10.25
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Pottapatty",
+        "Well_No": "21071",
+        "Historical_Observations": 5,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.37,
+          10.28
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Pulipatti",
+        "Well_No": "21022D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.29,
+          10.09
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Salisanthai",
+        "Well_No": "501032",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.8,
+          9.73
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Sennagarampatti",
+        "Well_No": "501020",
+        "Historical_Observations": 5,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.32,
+          10.08
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Sevarakottai",
+        "Well_No": "501043",
+        "Historical_Observations": 1,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.98,
+          9.74
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Surakundu",
+        "Well_No": "501021",
+        "Historical_Observations": 1,
+        "Last_Observed_Year": 2014,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.32,
+          10.04
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Thiruvadur",
+        "Well_No": "21024D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.32,
+          9.96
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Thumalapatti",
+        "Well_No": "501050",
+        "Historical_Observations": 2,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.78,
+          9.87
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Thumbaipatti",
+        "Well_No": "83096",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.36,
+          10.09
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Thumbalapatti",
+        "Well_No": "501050",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.78,
+          9.87
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Uranganpatti",
+        "Well_No": "21023D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.43,
+          10.0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Melur",
+        "Village": "Veppaodappu",
+        "Well_No": "501013",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.3,
+          9.92
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Athanur",
+        "Well_No": "501028",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.9,
+          9.72
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Chellampatti",
+        "Well_No": "501046",
+        "Historical_Observations": 1,
+        "Last_Observed_Year": 2017,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.87,
+          9.97
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Chinnakattalai",
+        "Well_No": "21003D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.8,
+          9.85
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Elumalai",
+        "Well_No": "83008",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.7,
+          9.86
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Elumalai Rf",
+        "Well_No": "21006D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.7,
+          9.86
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Karaikeni",
+        "Well_No": "83051",
+        "Historical_Observations": 7,
+        "Last_Observed_Year": 2013,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.97,
+          9.71
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Kunnathur",
+        "Well_No": "21030D",
+        "Historical_Observations": 7,
+        "Last_Observed_Year": 2013,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.89,
+          9.75
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Mallapuram",
+        "Well_No": "21011D",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2017,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.67,
+          9.81
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Mangalrev",
+        "Well_No": "501023",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.8,
+          9.79
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Mangalrevu",
+        "Well_No": "501023",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.8,
+          9.79
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Mathippanur",
+        "Well_No": "21050",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.84,
+          9.8
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Mothagam",
+        "Well_No": "501030",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.81,
+          9.68
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Muthunagayapuram",
+        "Well_No": "MWS21052",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.81,
+          9.77
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Muthunayakkapuram",
+        "Well_No": "21052",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.81,
+          9.77
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Pappanaickenpatti",
+        "Well_No": "21048",
+        "Historical_Observations": 4,
+        "Last_Observed_Year": 2018,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.71,
+          9.82
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Pappinaickenpatti",
+        "Well_No": "MWS21048",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.71,
+          9.82
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Peraiyur",
+        "Well_No": "21015D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.79,
+          9.74
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Perungamanallur",
+        "Well_No": "21046",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.77,
+          9.79
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Perunkamanallur",
+        "Well_No": "MWS21046",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.82,
+          9.86
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Salichanthai",
+        "Well_No": "501032",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.8,
+          9.73
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Saptur",
+        "Well_No": "83052",
+        "Historical_Observations": 5,
+        "Last_Observed_Year": 2013,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.74,
+          9.76
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Sedapatti",
+        "Well_No": "21041",
+        "Historical_Observations": 11,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.8,
+          9.83
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Subbulapuram",
+        "Well_No": "21016D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.81,
+          9.68
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "T.Kallipatti",
+        "Well_No": "21040",
+        "Historical_Observations": 9,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.86,
+          9.72
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "T.Kallupatti",
+        "Well_No": "Ex-21040",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.86,
+          9.72
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Peraiyur",
+        "Village": "Thirumanickam",
+        "Well_No": "83064",
+        "Historical_Observations": 9,
+        "Last_Observed_Year": 2015,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.75,
+          9.85
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Chinna Ulagani",
+        "Well_No": "21004D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.05,
+          9.77
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Chokkanathapuram",
+        "Well_No": "21002D",
+        "Historical_Observations": 12,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.98,
+          9.95
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Kallikudi",
+        "Well_No": "21007D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.97,
+          9.69
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Kandai",
+        "Well_No": "21037D",
+        "Historical_Observations": 13,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.91,
+          9.88
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Kappalur",
+        "Well_No": "83062A",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.02,
+          9.84
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Kurayur",
+        "Well_No": "21012D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.03,
+          9.69
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Maravankulam",
+        "Well_No": "501009",
+        "Historical_Observations": 4,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.0,
+          9.83
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Mathipanur",
+        "Well_No": "MWS21050",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.84,
+          9.8
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Mykudi",
+        "Well_No": "501037",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.02,
+          9.79
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Peikulam",
+        "Well_No": "21018D",
+        "Historical_Observations": 12,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.99,
+          9.65
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Puliankulam (M)",
+        "Well_No": "83048",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.91,
+          9.65
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Santhangudi",
+        "Well_No": "83006 A",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.94,
+          9.84
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Sathangudi",
+        "Well_No": "83006",
+        "Historical_Observations": 2,
+        "Last_Observed_Year": 2013,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.94,
+          9.84
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Sathankudi",
+        "Well_No": "83006A",
+        "Historical_Observations": 7,
+        "Last_Observed_Year": 2020,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.96,
+          9.79
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Sengapadai",
+        "Well_No": "83059",
+        "Historical_Observations": 1,
+        "Last_Observed_Year": 2007,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.95,
+          9.78
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Sivarakottai",
+        "Well_No": "501043",
+        "Historical_Observations": 4,
+        "Last_Observed_Year": 2018,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.98,
+          9.74
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Thangalacheri",
+        "Well_No": "21017D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.87,
+          9.84
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Thirumangalam",
+        "Village": "Utchapatti",
+        "Well_No": "21009A",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.01,
+          9.86
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Doddappanaickanur",
+        "Well_No": "21032D",
+        "Historical_Observations": 12,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.74,
+          9.97
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "K.Nattarpatti",
+        "Well_No": "21039",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.86,
+          9.97
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Meikilarpatti",
+        "Well_No": "21056",
+        "Historical_Observations": 5,
+        "Last_Observed_Year": 2018,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.8,
+          9.98
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Meikkilarpatti",
+        "Well_No": "MWS21056",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.8,
+          9.98
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Modhagam",
+        "Well_No": "501030",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.81,
+          9.68
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Panamooppanpatti",
+        "Well_No": "21057",
+        "Historical_Observations": 2,
+        "Last_Observed_Year": 2015,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.36,
+          10.14
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Pullaneri",
+        "Well_No": "21043",
+        "Historical_Observations": 7,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.95,
+          9.93
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Sangampatti",
+        "Well_No": "21044",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.9,
+          9.95
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Thumbalapatti",
+        "Well_No": "501050",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.78,
+          9.87
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Usilamaptti",
+        "Well_No": "83013",
+        "Historical_Observations": 7,
+        "Last_Observed_Year": 2013,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.79,
+          9.97
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Usilampatti",
+        "Well_No": "21033D",
+        "Historical_Observations": 14,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.79,
+          9.96
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Uthappanaickanur",
+        "Well_No": "21031D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.79,
+          10.04
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Valandur",
+        "Well_No": "83072A",
+        "Historical_Observations": 7,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.87,
+          9.95
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Veppanuthu",
+        "Well_No": "21028D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.84,
+          9.9
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Usilampatti",
+        "Village": "Vikramangalam",
+        "Well_No": "21029D",
+        "Historical_Observations": 7,
+        "Last_Observed_Year": 2013,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.89,
+          10.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Alagapuri",
+        "Well_No": "501053",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.07,
+          10.06
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Alanganallur",
+        "Well_No": "21068",
+        "Historical_Observations": 11,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.08,
+          10.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Kadupatti",
+        "Well_No": "21059",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.92,
+          10.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Kaupatti",
+        "Well_No": "MWS21059",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.92,
+          10.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Maduvarpatti",
+        "Well_No": "21069",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.12,
+          10.08
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Manianji",
+        "Well_No": "21013D",
+        "Historical_Observations": 12,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.1,
+          10.0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Manickampatti",
+        "Well_No": "501054",
+        "Historical_Observations": 5,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.13,
+          10.1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Muduvarpatti",
+        "Well_No": "HP21069",
+        "Historical_Observations": 2,
+        "Last_Observed_Year": 2020,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.12,
+          10.08
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Mullipallam",
+        "Well_No": "83014B",
+        "Historical_Observations": 10,
+        "Last_Observed_Year": 2016,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.95,
+          10.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Nagari",
+        "Well_No": "83080A",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.02,
+          10.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Nirathan",
+        "Well_No": "83092AY",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.98,
+          10.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Periailandakulam",
+        "Well_No": "21062",
+        "Historical_Observations": 6,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.05,
+          10.07
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Periyaianthaikulam",
+        "Well_No": "MWS21062",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.05,
+          10.07
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Saranthangi",
+        "Well_No": "21038",
+        "Historical_Observations": 5,
+        "Last_Observed_Year": 2015,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.15,
+          10.1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Senthamangalam",
+        "Well_No": "21026D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.14,
+          10.14
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Thanichiyam",
+        "Well_No": "501002",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2016,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.01,
+          10.04
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Thathampatti",
+        "Well_No": "21061",
+        "Historical_Observations": 8,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.02,
+          10.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Thiruvalavoinallur",
+        "Well_No": "501060",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2019,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.01,
+          10.01
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Thiruvalavoyanallur",
+        "Well_No": "501060",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.01,
+          10.01
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Thiruvedagam",
+        "Well_No": "21027D",
+        "Historical_Observations": 15,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.97,
+          10.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Vadipatti",
+        "Well_No": "83092AY",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2021,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.98,
+          10.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Taluk": "Vadipatti",
+        "Village": "Valayapatti",
+        "Well_No": "83020A",
+        "Historical_Observations": 3,
+        "Last_Observed_Year": 2016,
+        "Model_Selected": "Adaptive Ensemble",
+        "Calibration_Method": "Empirical Bayes Residual Scaling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.99,
+          10.09
+        ]
+      }
+    }
+  ]
+}
