@@ -503,19 +503,6 @@ export default function CombinedRiskView({
         </div>
       </div>
 
-      {/* Traceability and Partial Assessment Standards */}
-      <div className="card" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', background: 'var(--bg-muted)' }}>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-          <Info size={18} style={{ color: '#0f766e', flexShrink: 0, marginTop: '2px' }} />
-          <div>
-            <strong>Composite Traceability &amp; Partial Assessment Protocol:</strong>
-            <div style={{ marginTop: '4px', lineHeight: 1.5 }}>
-              The Combined Vulnerability Assessor preserves all 3 domain classes independently. When secondary parameters are unmeasured (indicated by asterisk *), assessments are explicitly marked <em>(Partial)</em>.
-              No synthetic numbers are invented. The composite score provides an interpretable 0–100 ranking where scores &ge; 70 signify significant hazard in at least one domain.
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

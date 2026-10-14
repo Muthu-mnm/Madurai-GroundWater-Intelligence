@@ -179,14 +179,6 @@ export default function AgricultureView({
         </div>
       </div>
 
-      {/* Coverage Status Badge */}
-      <div style={{ padding: '8px 14px', borderRadius: '6px', background: '#f0fdf4', border: '1px solid #bbf7d0', fontSize: '0.78rem', color: '#15803d', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <CheckCircle2 size={15} style={{ flexShrink: 0 }} />
-        <span>
-          <strong>Agronomic Coverage:</strong> Complete multi-parameter evaluation across EC, SAR, RSC, Na%, and pH with empirical Bayes shrinkage uncertainty bounds.
-        </span>
-      </div>
-
       {/* KPI Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
         {[
@@ -395,21 +387,6 @@ export default function AgricultureView({
         </div>
       </div>
 
-      {/* Model Scope & Agronomic Guidelines Note */}
-      <div className="card" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', background: 'var(--bg-muted)' }}>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-          <Info size={18} style={{ color: '#16a34a', flexShrink: 0, marginTop: '2px' }} />
-          <div>
-            <strong>Agronomic Guidelines &amp; Scope of Model:</strong>
-            <div style={{ marginTop: '4px', lineHeight: 1.5 }}>
-              Agricultural suitability is categorized under FAO guidelines:
-              EC &lt; 750 µS/cm (Low Salinity Hazard, Class C1/C2), 750–2,250 µS/cm (Moderate Restriction, Class C3), 2,250–4,000 µS/cm (Severe Restriction, Class C4), and &gt; 4,000 µS/cm (Unsuitable, Class C5).
-              Sodicity hazard is evaluated when SAR is available (SAR &lt; 10 Safe, 10–18 Moderate, 18–26 High).
-              <strong>Important Scope Disclaimer:</strong> This module is a hydrochemical screening tool. It does not predict crop yield, soil organic matter, or farm productivity, and assumes standard field drainage.
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

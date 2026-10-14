@@ -137,7 +137,6 @@ export default function App() {
           theme={theme} 
           toggleTheme={toggleTheme} 
           setMobileOpen={setMobileMenuOpen} 
-          dataStatus="Verified Research Grade" 
         />
 
         <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>

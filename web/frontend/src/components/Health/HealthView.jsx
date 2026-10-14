@@ -199,24 +199,7 @@ export default function HealthView({
         </div>
       </div>
 
-      {/* CRITICAL BOILING & MEDICAL SAFETY ALERT */}
-      <div style={{ 
-        padding: '12px 16px', 
-        borderRadius: '6px', 
-        background: '#fff1f2', 
-        border: '1px solid #fecdd3', 
-        display: 'flex', 
-        gap: '12px', 
-        alignItems: 'flex-start' 
-      }}>
-        <AlertOctagon size={20} style={{ color: '#e11d48', flexShrink: 0, marginTop: '2px' }} />
-        <div style={{ fontSize: '0.8rem', color: '#9f1239', lineHeight: 1.5 }}>
-          <strong>CRITICAL CHEMICAL SAFETY NOTICE:</strong> Boiling water <u>DOES NOT</u> remove or neutralize chemical contaminants like Fluoride, Nitrate, or dissolved mineral salts. In fact, boiling evaporates pure water and <strong>CONCENTRATES</strong> chemical toxins in the remaining liquid! Certified Reverse Osmosis (RO) filtration or activated alumina defluoridation is required for chemical removal.
-          <div style={{ marginTop: '3px', fontSize: '0.75rem', color: '#be123c' }}>
-            *Disclaimer: This module is a contaminant exposure screening system, not a clinical diagnostic device. It does not predict personal health outcomes or illness probability without validated clinical laboratory evidence.
-          </div>
-        </div>
-      </div>
+
 
       {/* KPI Summary Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
@@ -410,22 +393,6 @@ export default function HealthView({
               )}
             </tbody>
           </table>
-        </div>
-      </div>
-
-      {/* Guidance and Epidemiological Context */}
-      <div className="card" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', background: 'var(--bg-muted)' }}>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-          <Info size={18} style={{ color: '#dc2626', flexShrink: 0, marginTop: '2px' }} />
-          <div>
-            <strong>WHO 2017 &amp; BIS 10500:2012 Toxicological Context:</strong>
-            <div style={{ marginTop: '4px', lineHeight: 1.5 }}>
-              Fluoride in groundwater originates from geogenic dissolution of fluorite, apatite, and biotite minerals in Madurai granitic gneiss strata.
-              Concentrations &gt; 1.5 mg/L cause dental fluorosis (mottling, discoloration, enamel brittleness in children) and prolonged intake (&gt; 3.0 mg/L) causes crippling skeletal fluorosis (joint deformation and osteosclerosis).
-              Nitrate &gt; 45 mg/L induces infantile methemoglobinemia (inhibition of blood oxygen transport in infants under 6 months).
-              Laboratory verification and community defluoridation treatment are essential.
-            </div>
-          </div>
         </div>
       </div>
     </div>

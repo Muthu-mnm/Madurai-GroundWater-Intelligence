@@ -1,12 +1,11 @@
 import React from 'react';
-import { Menu, Sun, Moon, Database, CheckCircle2 } from 'lucide-react';
+import { Menu, Sun, Moon } from 'lucide-react';
 
 export default function TopBar({ 
   activeTab, 
   theme, 
   toggleTheme, 
-  setMobileOpen, 
-  dataStatus = 'Loaded' 
+  setMobileOpen
 }) {
   const titles = {
     map: 'Interactive Multi-Domain GIS Map',
@@ -23,21 +22,6 @@ export default function TopBar({
     methodology: 'System Architecture & Scientific Methodology'
   };
 
-  const subtitles = {
-    map: '',
-    water_quality: 'Identify poor-quality water and monitor changes over time (BIS 10500:2012 & CPCB).',
-    agriculture: 'Irrigation suitability, salinity and sodium hazards (FAO 29 & IS 11624:1986).',
-    health: 'Drinking-water quality screening (WHO 2017 & BIS 10500:2012).',
-    combined: 'Protective multi-domain composite rule engine integrating Water Quality, Agriculture, and Health screening.',
-    historical: '15-year historical water quality dataset from TWAD Board and CGWB monitoring stations.',
-    forecast: 'Nominal 80% empirical Bayes prediction intervals from the Adaptive Ensemble forecaster.',
-    prediction: 'Interactive forward scenario simulator with uncertainty bounds and multi-domain evaluation.',
-    validation: 'Expanding-window temporal backtesting across horizons 1–5 and finite-sample calibration.',
-    data: 'Comprehensive repository datasets, boundary layers, and automated data integrity verification.',
-    overview: 'High-level synthesis of historical records, calibrated predictions, and risk distribution across Madurai District.',
-    methodology: 'Data provenance, four assessment models, evaluation procedures, and hydrogeological limitations.'
-  };
-
   return (
     <header className="app-topbar">
       <div className="topbar-left">
@@ -50,17 +34,10 @@ export default function TopBar({
         </button>
         <div>
           <h1 className="topbar-title">{titles[activeTab] || 'Madurai Groundwater Intelligence'}</h1>
-          {subtitles[activeTab] && <p className="topbar-subtitle">{subtitles[activeTab]}</p>}
         </div>
       </div>
 
       <div className="topbar-right">
-        <div className="status-badge" title="Validated local dataset and model outputs loaded">
-          <span className="status-dot"></span>
-          <Database size={13} />
-          <span>Research Data: {dataStatus}</span>
-        </div>
-
         <button 
           className="btn btn-secondary btn-sm"
           onClick={toggleTheme}

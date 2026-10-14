@@ -331,22 +331,6 @@ export default function WaterQualityView({
           </table>
         </div>
       </div>
-
-      {/* Scientific Standards & Regulatory Note */}
-      <div className="card" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', background: 'var(--bg-muted)' }}>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-          <Info size={18} style={{ color: 'var(--accent-primary)', flexShrink: 0, marginTop: '2px' }} />
-          <div>
-            <strong>Water Quality Screening Methodology &amp; Uncertainty Bounds:</strong>
-            <div style={{ marginTop: '4px', lineHeight: 1.5 }}>
-              Evaluated against <em>BIS 10500:2012</em> drinking water specifications:
-              Fluoride (desirable 1.0, permissible 1.5 mg/L), TDS (desirable 500, permissible 2,000 mg/L), EC (CPCB 750 / 2,250 µS/cm), and pH (6.5–8.5).
-              Locations are classified as <em>Moderate Vulnerability</em> when point estimates fall in permissible relaxation zones OR nominal 80% empirical Bayes prediction bounds cross permissible limits.
-              <strong>Note:</strong> This model provides forecast-based environmental screening and is not a definitive laboratory certification of potability.
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
