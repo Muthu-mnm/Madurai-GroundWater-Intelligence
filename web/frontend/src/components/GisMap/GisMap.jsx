@@ -705,7 +705,7 @@ export default function GisMap({
             onClick={() => setShowSurface(!showSurface)}
             title="Toggle Continuous Spatial Interpolation Heatmap"
           >
-            <Sparkles size={13} />
+            
             <span>Heatmap</span>
           </button>
 
@@ -807,66 +807,6 @@ export default function GisMap({
         style={{ flex: 1, width: '100%', height: '100%', minHeight: '520px', background: '#e2e8f0' }} 
       />
 
-      {/* FLOATING MAP ON-CANVAS QUICK CONTROLS (Top-Left of map viewport) */}
-      <div style={{
-        position: 'absolute',
-        top: '64px',
-        left: '16px',
-        zIndex: 800,
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        backdropFilter: 'blur(4px)',
-        border: '1px solid var(--border-light)',
-        borderRadius: '8px',
-        padding: '5px 10px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px'
-      }}>
-        {/* Toggle Stations */}
-        <button
-          className={`btn btn-sm ${showStationMarkers ? 'btn-primary' : 'btn-secondary'}`}
-          onClick={() => setShowStationMarkers(!showStationMarkers)}
-          style={{ fontSize: '0.72rem', padding: '3px 8px', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}
-          title={showStationMarkers ? "Hide station points for clean surface map" : "Show station points"}
-        >
-          {showStationMarkers ? <Eye size={12} /> : <EyeOff size={12} />}
-          <span>{showStationMarkers ? 'Stations' : 'Stations (Hidden)'}</span>
-        </button>
-
-        {/* Toggle Heatmap */}
-        <button
-          className={`btn btn-sm ${showSurface ? 'btn-primary' : 'btn-secondary'}`}
-          onClick={() => setShowSurface(!showSurface)}
-          style={{ fontSize: '0.72rem', padding: '3px 8px', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}
-          title="Toggle Heatmap Layer"
-        >
-          <Sparkles size={12} />
-          <span>Heatmap</span>
-        </button>
-
-        {/* Heatmap Opacity Slider */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Opacity:</span>
-          <input
-            type="range"
-            min="0.05"
-            max="1.0"
-            step="0.05"
-            value={surfaceOpacity}
-            onChange={(e) => {
-              const val = parseFloat(e.target.value);
-              setSurfaceOpacity(val);
-              if (!showSurface) setShowSurface(true);
-            }}
-            style={{ width: '65px', height: '4px', cursor: 'pointer', accentColor: '#0f766e' }}
-            title="Adjust Heatmap Opacity (0% - 100%)"
-          />
-          <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-primary)', minWidth: '30px' }}>
-            {Math.round(surfaceOpacity * 100)}%
-          </span>
-        </div>
-      </div>
 
       {/* FLOATING MAP LEGEND */}
       <MapLegend 
