@@ -195,18 +195,11 @@ export default function App() {
             />
           )}
 
-          {activeTab === 'forecast' && (
+          {(activeTab === 'forecast' || activeTab === 'prediction') && (
             <ForecastExplorer 
               forecastData={forecastData}
               historicalData={historicalData}
-              onNavigateToPredict={() => setActiveTab('prediction')}
-            />
-          )}
-
-          {activeTab === 'prediction' && (
-            <PredictionSimulator 
-              historicalData={historicalData}
-              forecastData={forecastData}
+              initialTab={activeTab === 'prediction' ? 'simulator' : 'forecast'}
               onNavigateToMap={() => setActiveTab('map')}
             />
           )}

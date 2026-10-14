@@ -839,6 +839,7 @@ export function simulatePrediction({
     tRec.Risk_Level = stepRisk.level;
     tRec.Drinking_Suitability = stepRisk.drinkingSuitability;
     tRec.Water_Quality_Status = stepRisk.status;
+    tRec.multiDomain = evaluateMultiDomain(tRec);
     trajectory.push(tRec);
   }
 
@@ -847,6 +848,7 @@ export function simulatePrediction({
   forecast.Drinking_Suitability = finalRisk.drinkingSuitability;
   forecast.Water_Quality_Status = finalRisk.status;
   forecast.Risk_Description = finalRisk.description;
+  forecast.multiDomain = evaluateMultiDomain(forecast);
 
   const potabilityMeta = getDrinkingSuitability(finalRisk.level, forecast);
 
@@ -863,6 +865,7 @@ export function simulatePrediction({
     },
     forecast,
     potability: potabilityMeta,
+    multiDomain: forecast.multiDomain,
     trajectory
   };
 }

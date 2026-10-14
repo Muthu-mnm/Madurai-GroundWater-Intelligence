@@ -40,8 +40,7 @@ export default function Sidebar({
   // Secondary Tools under compact 'More' section
   const secondaryNavItems = [
     { id: 'historical', label: 'Historical Data (2007–2021)', icon: History },
-    { id: 'forecast', label: 'Decadal Forecasts (2022–2030)', icon: TrendingUp },
-    { id: 'prediction', label: 'Prediction Simulator', icon: Sparkles },
+    { id: 'forecast', label: 'Forecast & Predictor Simulation', icon: TrendingUp },
     { id: 'validation', label: 'Model Validation', icon: CheckCircle2 },
     { id: 'data', label: 'Data Explorer', icon: Database },
     { id: 'methodology', label: 'Methodology & Guidelines', icon: BookOpen }
