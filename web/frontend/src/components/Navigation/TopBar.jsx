@@ -9,25 +9,33 @@ export default function TopBar({
   dataStatus = 'Loaded' 
 }) {
   const titles = {
-    overview: 'Overview Dashboard',
-    map: 'Interactive GIS Map & Spatial Zonation',
+    map: 'Interactive Multi-Domain GIS Map',
+    water_quality: 'Water Quality Vulnerability Model',
+    agriculture: 'Agriculture Vulnerability Model',
+    health: 'Health Vulnerability Screening Model',
+    combined: 'Combined Vulnerability Assessment',
     historical: 'Historical Groundwater Observations (2007–2021)',
-    forecast: 'Forecast Explorer (2022–2030)',
-    risk: 'Groundwater Risk Assessment (BIS 10500)',
-    validation: 'Model Performance & Calibration',
-    data: 'Data Explorer & 28-Point Audit',
-    methodology: 'Methodology, Standards & Hydrogeology'
+    forecast: 'Decadal Forecasts (2022–2030)',
+    prediction: 'Hydrological Simulation & Prediction',
+    validation: 'Model Validation & Temporal Evaluation',
+    data: 'Data Explorer & Comprehensive Audit',
+    overview: 'District Overview Dashboard',
+    methodology: 'System Architecture & Scientific Methodology'
   };
 
   const subtitles = {
+    map: 'Thematic vulnerability mapping across 154 stations and 8 taluks of Madurai District with dynamic domain layer styling.',
+    water_quality: 'Top metrics: pH, EC, TDS, Fluoride, NO₃, Cl | Purpose: Identify poor-quality water and monitor changes over time (BIS 10500:2012 & CPCB).',
+    agriculture: 'Top metrics: EC, SAR, RSC, Na%, pH | Purpose: Irrigation suitability, salinity and sodium hazards (FAO 29 & IS 11624:1986).',
+    health: 'Top metrics: Fluoride, NO₃, TDS, pH, Cl | Purpose: Drinking-water quality screening (WHO 2017 & BIS 10500:2012).',
+    combined: 'Protective multi-domain composite rule engine integrating Water Quality, Agriculture, and Health screening.',
+    historical: '15-year historical water quality dataset from TWAD Board and CGWB monitoring stations.',
+    forecast: 'Nominal 80% empirical Bayes prediction intervals from the Adaptive Ensemble forecaster.',
+    prediction: 'Interactive forward scenario simulator with uncertainty bounds and multi-domain evaluation.',
+    validation: 'Expanding-window temporal backtesting across horizons 1–5 and finite-sample calibration.',
+    data: 'Comprehensive repository datasets, boundary layers, and automated data integrity verification.',
     overview: 'High-level synthesis of historical records, calibrated predictions, and risk distribution across Madurai District.',
-    map: 'Continuous spatial visualization across 7 Taluks and 154 monitoring stations with live point inspection.',
-    historical: '15-year historical water quality dataset from TWAD Board and CGWB monitoring wells.',
-    forecast: 'Nominal 80% empirically calibrated prediction intervals from Adaptive Ensemble modeling.',
-    risk: 'Interval-aware screening under statutory BIS 10500:2012 drinking water standards.',
-    validation: 'Chronological expanding-window backtesting across horizons 1–5 and finite-sample calibration.',
-    data: 'Comprehensive repository datasets, boundary layers, and automated data integrity audit.',
-    methodology: 'Peer-reviewed forecasting architecture, calibration formulations, and scientific disclaimers.'
+    methodology: 'Data provenance, four assessment models, evaluation procedures, and hydrogeological limitations.'
   };
 
   return (

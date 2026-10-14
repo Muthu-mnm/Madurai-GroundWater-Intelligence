@@ -24,7 +24,12 @@
     "TDS",
     "EC",
     "pH",
-    "Fluoride"
+    "Fluoride",
+    "NO3",
+    "Cl",
+    "SAR",
+    "RSC",
+    "Na%"
   ],
   "geographic_levels": [
     "taluk",
@@ -48,5 +53,29 @@
   ],
   "model_selection_methodology": "Chronological expanding-window backtesting across horizons 1\u20135; Damped Trend extrapolation",
   "uncertainty_formulation": "Compounding horizon-expanding prediction intervals: sigma_h = sqrt(sigma_0^2 + (h-1)*sigma_t^2)",
-  "status": "Validated research forecast pipeline"
+  "status": "Validated research forecast pipeline",
+  "top_metrics": {
+    "agriculture": [
+      "EC",
+      "SAR",
+      "RSC",
+      "Na%",
+      "pH"
+    ],
+    "human_health": [
+      "Fluoride",
+      "NO3",
+      "TDS",
+      "pH",
+      "Cl"
+    ],
+    "water_quality_monitoring": [
+      "pH",
+      "EC",
+      "TDS",
+      "Fluoride",
+      "NO3",
+      "Cl"
+    ]
+  }
 }

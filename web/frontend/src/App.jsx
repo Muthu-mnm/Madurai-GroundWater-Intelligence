@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Navigation/Sidebar';
 import TopBar from './components/Navigation/TopBar';
-import OverviewDashboard from './components/Overview/OverviewDashboard';
 import GisMap from './components/GisMap/GisMap';
+import WaterQualityView from './components/WaterQuality/WaterQualityView';
+import AgricultureView from './components/Agriculture/AgricultureView';
+import HealthView from './components/Health/HealthView';
+import CombinedRiskView from './components/Combined/CombinedRiskView';
 import HistoricalAnalysis from './components/Historical/HistoricalAnalysis';
 import ForecastExplorer from './components/Forecast/ForecastExplorer';
 import PredictionSimulator from './components/Prediction/PredictionSimulator';
-import RiskAssessment from './components/Risk/RiskAssessment';
 import ModelValidation from './components/Validation/ModelValidation';
 import DataExplorer from './components/DataExplorer/DataExplorer';
+import OverviewDashboard from './components/Overview/OverviewDashboard';
 import Methodology from './components/Methodology/Methodology';
 import { clientDataService } from './services/dataService';
 import { Droplets } from 'lucide-react';
 
 export default function App() {
+  // Map opens immediately as default application view (Section 9)
   const [activeTab, setActiveTab] = useState('map');
   const [theme, setTheme] = useState('light');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -89,19 +93,19 @@ export default function App() {
         fontFamily: 'Inter, sans-serif'
       }}>
         <div style={{
-          width: '44px',
-          height: '44px',
-          border: '3px solid rgba(23, 107, 112, 0.2)',
-          borderTopColor: 'var(--accent-primary)',
+          width: '40px',
+          height: '40px',
+          border: '3px solid rgba(15, 118, 110, 0.2)',
+          borderTopColor: '#0f766e',
           borderRadius: '50%',
           animation: 'spin 0.8s linear infinite'
         }}></div>
         <div style={{ textAlign: 'center' }}>
-          <h2 style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '0.04em', color: 'var(--text-primary)' }}>
-            INITIALIZING MADURAI GROUNDWATER INTELLIGENCE PLATFORM...
+          <h2 style={{ fontSize: '0.95rem', fontWeight: 700, letterSpacing: '0.04em', color: 'var(--text-primary)' }}>
+            LOADING MADURAI GROUNDWATER INTELLIGENCE PLATFORM
           </h2>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            Loading 2007–2030 hydrochemical datasets, GeoJSON boundaries &amp; calibrated risk models
+          <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+            Initializing Multi-Domain Vulnerability Models &amp; GIS Network (2007–2030)
           </p>
         </div>
         <style>{`
@@ -133,20 +137,11 @@ export default function App() {
           theme={theme} 
           toggleTheme={toggleTheme} 
           setMobileOpen={setMobileMenuOpen} 
-          dataStatus="Verified Local" 
+          dataStatus="Verified Research Grade" 
         />
 
-        <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          {activeTab === 'overview' && (
-            <OverviewDashboard 
-              historicalData={historicalData}
-              forecastData={forecastData}
-              metadata={metadata}
-              onNavigateToMap={() => setActiveTab('map')}
-              onNavigateToPredict={() => setActiveTab('prediction')}
-            />
-          )}
-
+        <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          {/* Primary View: Map Opens Immediately as Default */}
           {activeTab === 'map' && (
             <GisMap 
               historicalData={historicalData}
@@ -159,6 +154,43 @@ export default function App() {
             />
           )}
 
+          {/* Model 1: Water Quality Vulnerability */}
+          {activeTab === 'water_quality' && (
+            <WaterQualityView 
+              historicalData={historicalData}
+              forecastData={forecastData}
+              onSelectStation={() => setActiveTab('map')}
+            />
+          )}
+
+          {/* Model 2: Agriculture Vulnerability */}
+          {activeTab === 'agriculture' && (
+            <AgricultureView 
+              historicalData={historicalData}
+              forecastData={forecastData}
+              onSelectStation={() => setActiveTab('map')}
+            />
+          )}
+
+          {/* Model 3: Health Vulnerability Screening */}
+          {activeTab === 'health' && (
+            <HealthView 
+              historicalData={historicalData}
+              forecastData={forecastData}
+              onSelectStation={() => setActiveTab('map')}
+            />
+          )}
+
+          {/* Model 4: Combined Vulnerability Assessment */}
+          {activeTab === 'combined' && (
+            <CombinedRiskView 
+              historicalData={historicalData}
+              forecastData={forecastData}
+              onSelectStation={() => setActiveTab('map')}
+            />
+          )}
+
+          {/* Secondary Views (Accessible via 'More Tools & Data') */}
           {activeTab === 'historical' && (
             <HistoricalAnalysis 
               historicalData={historicalData} 
@@ -181,12 +213,6 @@ export default function App() {
             />
           )}
 
-          {activeTab === 'risk' && (
-            <RiskAssessment 
-              forecastData={forecastData}
-            />
-          )}
-
           {activeTab === 'validation' && (
             <ModelValidation 
               metrics={metrics}
@@ -198,6 +224,16 @@ export default function App() {
               historicalData={historicalData}
               forecastData={forecastData}
               validationReport={validationReport}
+            />
+          )}
+
+          {activeTab === 'overview' && (
+            <OverviewDashboard 
+              historicalData={historicalData}
+              forecastData={forecastData}
+              metadata={metadata}
+              onNavigateToMap={() => setActiveTab('map')}
+              onNavigateToPredict={() => setActiveTab('prediction')}
             />
           )}
 

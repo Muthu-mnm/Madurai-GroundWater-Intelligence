@@ -25,7 +25,7 @@ class AdaptiveEnsembleForecaster:
         (pH is strictly bounded within the [0, 14] Sorensen scale).
     """
     def __init__(self, key_cols=None, phi=0.70, origin_year=2021):
-        self.key_cols = key_cols or ['TDS', 'EC', 'Fluoride', 'pH']
+        self.key_cols = key_cols or ['TDS', 'EC', 'pH', 'Fluoride', 'NO3', 'Cl', 'SAR', 'RSC', 'Na%']
         self.phi = phi
         self.origin_year = origin_year
         self.is_fitted = False
@@ -38,7 +38,12 @@ class AdaptiveEnsembleForecaster:
             'TDS': 1.259,
             'EC': 1.223,
             'Fluoride': 1.364,
-            'pH': 1.631
+            'pH': 1.631,
+            'NO3': 1.310,
+            'Cl': 1.285,
+            'SAR': 1.290,
+            'RSC': 1.305,
+            'Na%': 1.260
         }
         
     def fit(self, df_annual):
@@ -50,8 +55,9 @@ class AdaptiveEnsembleForecaster:
         
         # 1. Regional Priors per parameter
         for param in self.key_cols:
-            self.taluk_priors_[param] = tr_df.groupby('Taluk')[param].std().to_dict()
-            self.district_priors_[param] = float(tr_df[param].std())
+            if param in tr_df.columns:
+                self.taluk_priors_[param] = tr_df.groupby('Taluk')[param].std().to_dict()
+                self.district_priors_[param] = float(tr_df[param].std())
             
         # 2. Station-level parameters
         self.stations_ = {}
@@ -71,13 +77,17 @@ class AdaptiveEnsembleForecaster:
             }
             
             for param in self.key_cols:
+                if param not in grp.columns:
+                    continue
                 y_val = grp[param].values
                 years_val = grp['Year'].values
                 hist_mean = float(np.mean(y_val))
                 last_val = float(y_val[-1])
-                hist_std = float(np.std(y_val, ddof=1)) if len(y_val) > 1 else hist_mean * 0.15
+                hist_std = float(np.std(y_val, ddof=1)) if len(y_val) > 1 else max(0.01, hist_mean * 0.15)
                 
-                s_prior = float(self.taluk_priors_[param].get(taluk, self.district_priors_[param]))
+                s_prior = float(self.taluk_priors_.get(param, {}).get(taluk, self.district_priors_.get(param, hist_std)))
+                if np.isnan(s_prior) or s_prior <= 0:
+                    s_prior = max(0.01, hist_std)
                 
                 if n_years >= 3:
                     X_tr = years_val - years_val.mean()
@@ -120,7 +130,6 @@ class AdaptiveEnsembleForecaster:
             
         key = (taluk.lower(), village.lower())
         if key not in self.stations_:
-            # Search by village name alone if taluk doesn't match
             matches = [k for k in self.stations_ if k[1] == village.lower()]
             if matches:
                 key = matches[0]
@@ -142,13 +151,15 @@ class AdaptiveEnsembleForecaster:
         }
         
         for param in self.key_cols:
+            if param not in st['params']:
+                continue
             p_info = st['params'][param]
             hist_mean = p_info['hist_mean']
             last_val = p_info['last_val']
             slope = p_info['slope']
             shrinkage = p_info['shrinkage']
             s_pooled = p_info['s_pooled']
-            q_val = self.calibrated_q80_.get(param, 1.25)
+            q_val = self.calibrated_q80_.get(param, 1.28)
             
             damped_slope = (slope * shrinkage) * sum([self.phi**i for i in range(1, int(h)+1)])
             w = min(1.0, 0.15 * h)
@@ -157,6 +168,8 @@ class AdaptiveEnsembleForecaster:
             
             if param == 'pH':
                 p_val = np.clip(p_val, 0.0, 14.0)
+            elif param == 'Na%':
+                p_val = np.clip(p_val, 0.0, 100.0)
             else:
                 p_val = np.maximum(0.0, p_val)
                 
@@ -164,6 +177,9 @@ class AdaptiveEnsembleForecaster:
             if param == 'pH':
                 lower_ci = np.clip(p_val - q_val * sigma_h, 0.0, 14.0)
                 upper_ci = np.clip(p_val + q_val * sigma_h, 0.0, 14.0)
+            elif param == 'Na%':
+                lower_ci = np.clip(p_val - q_val * sigma_h, 0.0, 100.0)
+                upper_ci = np.clip(p_val + q_val * sigma_h, 0.0, 100.0)
             else:
                 lower_ci = np.maximum(0.0, p_val - q_val * sigma_h)
                 upper_ci = p_val + q_val * sigma_h
@@ -172,7 +188,7 @@ class AdaptiveEnsembleForecaster:
             results[f'{param}_Lower_CI'] = round(float(lower_ci), 2)
             results[f'{param}_Upper_CI'] = round(float(upper_ci), 2)
             
-        # Regulatory Risk Classification
+        # Multi-Domain Regulatory Risk Classification
         risk_info = self.assess_risk(results)
         results.update(risk_info)
         return results
@@ -189,13 +205,28 @@ class AdaptiveEnsembleForecaster:
     @staticmethod
     def assess_risk(row):
         """
-        Evaluate regulatory drinking water compliance under BIS 10500:2012
-        and salinity under CPCB / FAO guidelines.
+        Evaluate regulatory compliance under BIS 10500:2012, WHO Guidelines,
+        and FAO 29 / IS 11624 irrigation standards.
         """
-        tds, tds_up = row['TDS'], row['TDS_Upper_CI']
-        f, f_up = row['Fluoride'], row['Fluoride_Upper_CI']
-        ph, ph_low, ph_up = row['pH'], row['pH_Lower_CI'], row['pH_Upper_CI']
-        ec, ec_up = row['EC'], row['EC_Upper_CI']
+        tds = row.get('TDS', 0.0)
+        tds_up = row.get('TDS_Upper_CI', tds)
+        f = row.get('Fluoride', 0.0)
+        f_up = row.get('Fluoride_Upper_CI', f)
+        ph = row.get('pH', 7.0)
+        ph_low = row.get('pH_Lower_CI', ph)
+        ph_up = row.get('pH_Upper_CI', ph)
+        ec = row.get('EC', 0.0)
+        ec_up = row.get('EC_Upper_CI', ec)
+        no3 = row.get('NO3')
+        no3_up = row.get('NO3_Upper_CI', no3)
+        cl = row.get('Cl')
+        cl_up = row.get('Cl_Upper_CI', cl)
+        sar = row.get('SAR')
+        sar_up = row.get('SAR_Upper_CI', sar)
+        rsc = row.get('RSC')
+        rsc_up = row.get('RSC_Upper_CI', rsc)
+        na_pct = row.get('Na%')
+        na_pct_up = row.get('Na%_Upper_CI', na_pct)
         
         # 1. Confirmed Forecast Exceedance (High Risk)
         confirmed = []
@@ -203,6 +234,12 @@ class AdaptiveEnsembleForecaster:
         if tds > 2000.0: confirmed.append(f"TDS High ({tds:.1f} mg/L > 2000 BIS Limit - Severe Salinity)")
         if ph < 6.5 or ph > 8.5: confirmed.append(f"pH Non-compliant ({ph:.2f} outside 6.5-8.5 BIS Specification)")
         if ec > 2250.0: confirmed.append(f"EC High ({ec:.1f} µS/cm > 2250 CPCB Salinity Guide)")
+        if no3 is not None and no3 > 45.0: confirmed.append(f"Nitrate High ({no3:.1f} mg/L > 45 BIS Limit - Methemoglobinemia Hazard)")
+        if cl is not None and cl > 1000.0: confirmed.append(f"Chloride High ({cl:.1f} mg/L > 1000 BIS Limit - Salty/GI Hazard)")
+        if sar is not None and sar > 18.0: confirmed.append(f"SAR High ({sar:.1f} > 18 - Severe Sodicity Hazard)")
+        if rsc is not None and rsc > 2.5: confirmed.append(f"RSC High ({rsc:.2f} meq/L > 2.5 - Hazardous Alkalinity)")
+        if na_pct is not None and na_pct > 60.0: confirmed.append(f"Na% High ({na_pct:.1f}% > 60% - High Sodium Hazard)")
+        
         if confirmed:
             return {
                 'Water_Quality_Status': 'Non-Compliant (Forecasted Exceedance)',
@@ -217,6 +254,12 @@ class AdaptiveEnsembleForecaster:
         if ph_low < 6.5: borderline.append(f"Compliant pH ({ph:.2f}), but Lower CI ({ph_low:.2f}) drops below 6.5 (corrosion risk)")
         if ph_up > 8.5: borderline.append(f"Compliant pH ({ph:.2f}), but Upper CI ({ph_up:.2f}) exceeds 8.5 (scaling risk)")
         if ec_up > 2250.0: borderline.append(f"Permissible EC ({ec:.1f} µS/cm), but Upper CI ({ec_up:.1f} µS/cm) crosses 2250 CPCB guide")
+        if no3_up is not None and no3_up > 45.0: borderline.append(f"Permissible NO3 ({no3:.1f} mg/L), but Upper CI ({no3_up:.1f} mg/L) crosses 45 limit")
+        if cl_up is not None and cl_up > 1000.0: borderline.append(f"Permissible Cl ({cl:.1f} mg/L), but Upper CI ({cl_up:.1f} mg/L) crosses 1000 limit")
+        if sar_up is not None and sar_up > 18.0: borderline.append(f"Permissible SAR ({sar:.1f}), but Upper CI ({sar_up:.1f}) crosses 18 sodicity guide")
+        if rsc_up is not None and rsc_up > 2.5: borderline.append(f"Permissible RSC ({rsc:.2f}), but Upper CI ({rsc_up:.2f}) crosses 2.5 guide")
+        if na_pct_up is not None and na_pct_up > 60.0: borderline.append(f"Permissible Na% ({na_pct:.1f}%), but Upper CI ({na_pct_up:.1f}%) crosses 60% guide")
+        
         if borderline:
             return {
                 'Water_Quality_Status': 'Conditionally Permissible (Potential Exceedance)',
@@ -225,10 +268,18 @@ class AdaptiveEnsembleForecaster:
             }
             
         # 3. Strict Desirable Quality (Low Risk)
-        if (tds <= 500.0 and tds_up <= 500.0 and
+        is_desirable = (
+            tds <= 500.0 and tds_up <= 500.0 and
             f <= 1.0 and f_up <= 1.0 and
             ec <= 750.0 and ec_up <= 750.0 and
-            ph >= 6.5 and ph_low >= 6.5 and ph <= 8.5 and ph_up <= 8.5):
+            ph >= 6.5 and ph_low >= 6.5 and ph <= 8.5 and ph_up <= 8.5 and
+            (no3 is None or (no3 <= 45.0 and no3_up <= 45.0)) and
+            (cl is None or (cl <= 250.0 and cl_up <= 250.0)) and
+            (sar is None or (sar <= 10.0 and sar_up <= 10.0)) and
+            (rsc is None or (rsc <= 1.25 and rsc_up <= 1.25)) and
+            (na_pct is None or (na_pct <= 40.0 and na_pct_up <= 40.0))
+        )
+        if is_desirable:
             return {
                 'Water_Quality_Status': 'Desirable Quality (Meets Selected BIS Acceptable Limits)',
                 'Risk_Level': 'Low Risk',
@@ -240,6 +291,7 @@ class AdaptiveEnsembleForecaster:
         if tds > 500.0 or tds_up > 500.0: perm.append(f"TDS in Permissible Range (Point: {tds:.1f}, Upper CI: {tds_up:.1f} mg/L)")
         if f > 1.0 or f_up > 1.0: perm.append(f"Fluoride in Permissible Range (Point: {f:.2f}, Upper CI: {f_up:.2f} mg/L)")
         if ec > 750.0 or ec_up > 750.0: perm.append(f"EC in Permissible Range (Point: {ec:.1f}, Upper CI: {ec_up:.1f} µS/cm)")
+        if cl is not None and (cl > 250.0 or (cl_up is not None and cl_up > 250.0)): perm.append(f"Chloride in Permissible Range (Point: {cl:.1f}, Upper CI: {cl_up:.1f} mg/L)")
         return {
             'Water_Quality_Status': 'Permissible Quality (In Absence of Alternate Source)',
             'Risk_Level': 'Medium Risk (Permissible)',

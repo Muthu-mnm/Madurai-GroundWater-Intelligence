@@ -446,6 +446,11 @@ export default function OverviewDashboard({
             <option value="EC">EC — Electrical Conductivity (µS/cm)</option>
             <option value="Fluoride">Fluoride — Fluoride Content (mg/L)</option>
             <option value="pH">pH — Hydrogen Ion Activity (dimensionless)</option>
+            <option value="NO3">NO₃ — Nitrate (mg/L)</option>
+            <option value="Cl">Cl — Chloride (mg/L)</option>
+            <option value="SAR">SAR — Sodium Adsorption Ratio</option>
+            <option value="RSC">RSC — Residual Sodium Carbonate (meq/L)</option>
+            <option value="Na%">Na% — Sodium Percentage (%)</option>
           </select>
         </div>
 

@@ -1,6 +1,10 @@
 /**
- * Water Quality Thresholds and Semantic Risk Standards
- * Specifications: BIS 10500:2012 Drinking Water | CPCB / FAO Salinity Guides
+ * Multi-Domain Groundwater Vulnerability Thresholds & Standards
+ * Standards:
+ * - Water Quality: BIS 10500:2012 Drinking Water Specification & CPCB
+ * - Agriculture: FAO Irrigation Paper 29 (1985) & IS 11624:1986
+ * - Health: WHO Guidelines for Drinking-water Quality (2017) & BIS 10500:2012
+ * - Combined: Protective Multi-Domain Composite Rule Engine (v2.1.0)
  */
 
 export const THRESHOLDS = {
@@ -10,6 +14,7 @@ export const THRESHOLDS = {
     unit: 'mg/L',
     desirable: 500.0,
     permissible: 2000.0,
+    extreme: 3000.0,
     cpcb_guide: 2000.0,
     step: 50
   },
@@ -19,6 +24,7 @@ export const THRESHOLDS = {
     unit: 'µS/cm',
     desirable: 750.0,
     permissible: 2250.0,
+    extreme: 4000.0,
     cpcb_guide: 2250.0,
     step: 100
   },
@@ -28,6 +34,7 @@ export const THRESHOLDS = {
     unit: 'mg/L',
     desirable: 1.0,
     permissible: 1.5,
+    extreme: 3.0,
     cpcb_guide: 1.5,
     step: 0.1
   },
@@ -39,7 +46,78 @@ export const THRESHOLDS = {
     max: 8.5,
     desirable_min: 6.5,
     desirable_max: 8.5,
+    extreme_min: 5.0,
+    extreme_max: 9.5,
     step: 0.1
+  },
+  Nitrate: {
+    name: 'Nitrate (as NO3)',
+    symbol: 'NO3',
+    unit: 'mg/L',
+    desirable: 45.0,
+    permissible: 45.0,
+    safe: 45.0,
+    extreme: 100.0,
+    step: 1.0
+  },
+  NO3: {
+    name: 'Nitrate (as NO3)',
+    symbol: 'NO3',
+    unit: 'mg/L',
+    desirable: 45.0,
+    permissible: 45.0,
+    safe: 45.0,
+    extreme: 100.0,
+    step: 1.0
+  },
+  Cl: {
+    name: 'Chloride (as Cl)',
+    symbol: 'Cl',
+    unit: 'mg/L',
+    desirable: 250.0,
+    permissible: 1000.0,
+    extreme: 1500.0,
+    step: 10.0
+  },
+  Chloride: {
+    name: 'Chloride (as Cl)',
+    symbol: 'Cl',
+    unit: 'mg/L',
+    desirable: 250.0,
+    permissible: 1000.0,
+    extreme: 1500.0,
+    step: 10.0
+  },
+  SAR: {
+    name: 'Sodium Adsorption Ratio',
+    symbol: 'SAR',
+    unit: 'ratio',
+    desirable: 10.0,
+    permissible: 18.0,
+    low: 10.0,
+    moderate: 18.0,
+    high: 26.0,
+    step: 0.5
+  },
+  RSC: {
+    name: 'Residual Sodium Carbonate',
+    symbol: 'RSC',
+    unit: 'meq/L',
+    desirable: 1.25,
+    permissible: 2.50,
+    low: 1.25,
+    moderate: 2.50,
+    high: 3.50,
+    step: 0.25
+  },
+  'Na%': {
+    name: 'Sodium Percentage',
+    symbol: 'Na%',
+    unit: '%',
+    desirable: 40.0,
+    permissible: 60.0,
+    extreme: 80.0,
+    step: 1.0
   }
 };
 
@@ -73,8 +151,171 @@ export const RISK_COLORS = {
     bg: '#F1F5F9',
     border: '#CBD5E1',
     badgeClass: 'nodata'
+  },
+  // Backward compatibility alias keys
+  'Very High Vulnerability': {
+    color: '#DC2626',
+    bg: '#FEF2F2',
+    border: '#FECACA',
+    badgeClass: 'high'
+  },
+  'High Vulnerability': {
+    color: '#EA580C',
+    bg: '#FFF7ED',
+    border: '#FED7AA',
+    badgeClass: 'high'
+  },
+  'Moderate Vulnerability': {
+    color: '#D97706',
+    bg: '#FFFBEB',
+    border: '#FDE68A',
+    badgeClass: 'borderline'
+  },
+  'Low Vulnerability': {
+    color: '#0D9488',
+    bg: '#F0FDFA',
+    border: '#99F6E4',
+    badgeClass: 'low'
+  },
+  'Partial Assessment': {
+    color: '#0284C7',
+    bg: '#F0F9FF',
+    border: '#BAE6FD',
+    badgeClass: 'permissible'
   }
 };
+
+export const VULNERABILITY_CLASSES = {
+  'Low Vulnerability': {
+    label: 'Low Vulnerability',
+    rank: 1,
+    color: '#0d9488',
+    bg: '#f0fdfa',
+    border: '#99f6e4',
+    badgeClass: 'badge-vulnerability-low',
+    summary: 'Minimal Vulnerability',
+    description: 'Complies strictly with desirable statutory limits and safe irrigation guidelines.'
+  },
+  'Moderate Vulnerability': {
+    label: 'Moderate Vulnerability',
+    rank: 2,
+    color: '#d97706',
+    bg: '#fffbeb',
+    border: '#fde68a',
+    badgeClass: 'badge-vulnerability-mod',
+    summary: 'Moderate Screening Concern',
+    description: 'Parameters within permissible relaxation range or prediction intervals indicate potential exceedance.'
+  },
+  'High Vulnerability': {
+    label: 'High Vulnerability',
+    rank: 3,
+    color: '#ea580c',
+    bg: '#fff7ed',
+    border: '#fed7aa',
+    badgeClass: 'badge-vulnerability-high',
+    summary: 'High Vulnerability Hazard',
+    description: 'Point forecast or observed value breaches statutory permissible limits or severe agricultural thresholds.'
+  },
+  'Very High Vulnerability': {
+    label: 'Very High Vulnerability',
+    rank: 4,
+    color: '#dc2626',
+    bg: '#fef2f2',
+    border: '#fecaca',
+    badgeClass: 'badge-vulnerability-vhigh',
+    summary: 'Critical Vulnerability / Toxicity',
+    description: 'Severe contamination, acute toxic exposure, or extreme salinity/alkalinity detected.'
+  },
+  'Partial Assessment': {
+    label: 'Partial Assessment',
+    rank: 0,
+    color: '#0284c7',
+    bg: '#f0f9ff',
+    border: '#bae6fd',
+    badgeClass: 'badge-vulnerability-partial',
+    summary: 'Partial Domain Coverage',
+    description: 'Evaluated from available subsets of domains; secondary indicators were unmeasured.'
+  },
+  'Insufficient Data': {
+    label: 'Insufficient Data',
+    rank: -1,
+    color: '#64748b',
+    bg: '#f8fafc',
+    border: '#cbd5e1',
+    badgeClass: 'badge-vulnerability-nodata',
+    summary: 'Incomplete Measurement Data',
+    description: 'Essential parameters missing; cannot perform screening without primary measurements.'
+  }
+};
+
+export const DOMAIN_METADATA = {
+  combined: {
+    id: 'combined',
+    name: 'Combined Assessment',
+    title: 'Combined Groundwater Vulnerability',
+    shortTitle: 'Combined Assessment',
+    topMetrics: ['EC', 'SAR', 'RSC', 'Na%', 'Fluoride', 'NO3', 'TDS', 'pH', 'Cl'],
+    purpose: 'Protective composite screening across Agriculture, Human Health, and Water Quality',
+    standards: 'Protective Precedence Engine (v2.1.0)',
+    standard: 'Protective composite rule engine (WQ + Health + Agri)',
+    modelType: 'Protective Composite Rule Engine (v2.1.0)',
+    description: 'Combines independent domain risk models. A severe hazard in any domain cannot be masked by low risk in another.'
+  },
+  water_quality: {
+    id: 'water_quality',
+    name: 'Water Quality Monitoring',
+    title: 'Water Quality Vulnerability',
+    shortTitle: 'Water Quality',
+    topMetrics: ['pH', 'EC', 'TDS', 'Fluoride', 'NO3', 'Cl'],
+    purpose: 'Identify poor-quality water and monitor changes over time',
+    standards: 'BIS 10500:2012 & CPCB',
+    standard: 'BIS 10500:2012 & CPCB (pH, EC, TDS, Fluoride, NO3, Cl)',
+    modelType: 'Adaptive Ensemble Forecaster + BIS 10500:2012 Regulatory Screening',
+    description: 'Screens pH, EC, TDS, Fluoride, Nitrate, and Chloride point forecasts and nominal 80% Bayesian uncertainty intervals.'
+  },
+  agriculture: {
+    id: 'agriculture',
+    name: 'Agriculture',
+    title: 'Agriculture Vulnerability',
+    shortTitle: 'Agriculture',
+    topMetrics: ['EC', 'SAR', 'RSC', 'Na%', 'pH'],
+    purpose: 'Irrigation suitability, salinity and sodium hazards',
+    standards: 'FAO 29 & IS 11624:1986',
+    standard: 'FAO 29 & IS 11624:1986 (EC, SAR, RSC, Na%, pH)',
+    modelType: 'Rule-Based Irrigation Suitability Assessment (No supervised yield claims)',
+    description: 'Screens salinity hazard (EC), sodicity hazard (SAR), bicarbonate alkalinity (RSC), sodium percentage (Na%), and pH.'
+  },
+  health: {
+    id: 'health',
+    name: 'Human Health',
+    title: 'Health Vulnerability Screening',
+    shortTitle: 'Health Screening',
+    topMetrics: ['Fluoride', 'NO3', 'TDS', 'pH', 'Cl'],
+    purpose: 'Drinking-water quality screening',
+    standards: 'WHO 2017 & BIS 10500:2012',
+    standard: 'WHO 2017 & BIS 10500:2012 (Fluoride, NO3, TDS, pH, Cl)',
+    modelType: 'Contaminant-Based Exposure Screening Tool (Not a clinical diagnosis device)',
+    description: 'Screens toxicological exposure hazards for Fluoride, Nitrate (methemoglobinemia), mineral TDS load, pH, and Chloride.'
+  }
+};
+
+export const DOMAIN_APPLICATION_METRICS = DOMAIN_METADATA;
+
+export function getVulnerabilityMeta(riskClass) {
+  if (!riskClass) return VULNERABILITY_CLASSES['Insufficient Data'];
+  const norm = String(riskClass).trim();
+  
+  if (VULNERABILITY_CLASSES[norm]) {
+    return VULNERABILITY_CLASSES[norm];
+  }
+  
+  if (norm.includes('Very High')) return VULNERABILITY_CLASSES['Very High Vulnerability'];
+  if (norm.includes('High')) return VULNERABILITY_CLASSES['High Vulnerability'];
+  if (norm.includes('Moderate') || norm.includes('Medium') || norm.includes('Borderline') || norm.includes('Permissible')) return VULNERABILITY_CLASSES['Moderate Vulnerability'];
+  if (norm.includes('Low')) return VULNERABILITY_CLASSES['Low Vulnerability'];
+  if (norm.includes('Partial')) return VULNERABILITY_CLASSES['Partial Assessment'];
+  return VULNERABILITY_CLASSES['Insufficient Data'];
+}
 
 export const DRINKING_SUITABILITY = {
   'Drinkable': {
@@ -95,9 +336,9 @@ export const DRINKING_SUITABILITY = {
     bg: '#FFFBEB',
     border: '#FDE68A',
     badgeClass: 'boiling',
-    summary: 'Boiling & Filtration Required',
-    guidance: 'Permissible in absence of alternate source. Vigorous boiling (3–5 mins) and domestic particulate filtration recommended before drinking.',
-    treatment: 'Boiling, particulate filtration, or activated carbon.'
+    summary: 'Microbial Boiling & Filtration Only',
+    guidance: 'Boiling kills bacteria/pathogens in absence of alternate source, but DOES NOT remove dissolved chemical contaminants (fluoride, nitrate, salts).',
+    treatment: 'Boiling for pathogens; activated carbon or RO required for dissolved ions.'
   },
   'Not Drinkable': {
     label: 'Not Drinkable',
@@ -123,9 +364,6 @@ export const DRINKING_SUITABILITY = {
   }
 };
 
-/**
- * Resolves standard Drinking Suitability metadata for any record or risk category
- */
 export function getDrinkingSuitability(riskLevel, record = null) {
   if (record && record.Drinking_Suitability && DRINKING_SUITABILITY[record.Drinking_Suitability]) {
     return DRINKING_SUITABILITY[record.Drinking_Suitability];
@@ -133,21 +371,13 @@ export function getDrinkingSuitability(riskLevel, record = null) {
   if (record && record.drinking_suitability && DRINKING_SUITABILITY[record.drinking_suitability]) {
     return DRINKING_SUITABILITY[record.drinking_suitability];
   }
-  if (riskLevel === 'Low Risk') {
-    return DRINKING_SUITABILITY['Drinkable'];
-  }
-  if (riskLevel === 'Medium Risk (Permissible)' || riskLevel === 'Medium Risk (Borderline)') {
-    return DRINKING_SUITABILITY['Required Boiling'];
-  }
-  if (riskLevel === 'High Risk') {
-    return DRINKING_SUITABILITY['Not Drinkable'];
-  }
+  const meta = getVulnerabilityMeta(riskLevel);
+  if (meta.label === 'Low Vulnerability') return DRINKING_SUITABILITY['Drinkable'];
+  if (meta.label === 'Moderate Vulnerability') return DRINKING_SUITABILITY['Required Boiling'];
+  if (meta.label === 'High Vulnerability' || meta.label === 'Very High Vulnerability') return DRINKING_SUITABILITY['Not Drinkable'];
   return DRINKING_SUITABILITY['Unassessed'];
 }
 
-/**
- * Client-Side Risk Assessment Engine (Mirrors Calibrated Python Service)
- */
 export function evaluateRisk(row) {
   if (!row) return { 
     level: 'Insufficient Data', 
@@ -354,10 +584,6 @@ const DISTRICT_PRIORS = {
   pH: 0.39
 };
 
-/**
- * High-performance client-side prediction simulator.
- * Computes exact Bayesian ensemble forecast, 80% CI intervals, risk and drinking potability.
- */
 export function simulatePrediction({
   targetYear = 2026,
   tds = 500,
@@ -386,7 +612,6 @@ export function simulatePrediction({
   const forecast = { Year: yr };
   const trajectory = [];
 
-  // Pre-calculate trajectory from 2022 to target year
   for (let tYr = 2022; tYr <= yr; tYr++) {
     const tH = Math.max(1, tYr - 2021);
     const tW = Math.min(1.0, 0.15 * tH);
@@ -474,4 +699,3 @@ export function simulatePrediction({
     trajectory
   };
 }
-
