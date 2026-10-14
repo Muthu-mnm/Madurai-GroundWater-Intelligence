@@ -695,7 +695,7 @@ export default function GisMap({
             title={showStationMarkers ? "Click to hide station markers for unobstructed surface view" : "Click to show station markers"}
           >
             {showStationMarkers ? <Eye size={13} /> : <EyeOff size={13} />}
-            <span>{showStationMarkers ? 'Stations' : 'Stations (Hidden)'}</span>
+            <span>{showStationMarkers ? 'Stations' : 'Stations'}</span>
           </button>
 
           {/* Spatial Heatmap Toggle */}
@@ -730,17 +730,6 @@ export default function GisMap({
               {Math.round(surfaceOpacity * 100)}%
             </span>
           </div>
-
-          {/* Taluks Boundary Toggle */}
-          <button
-            className={`btn btn-sm ${showTalukBoundaries ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ fontSize: '0.75rem', padding: '3px 8px', display: 'flex', alignItems: 'center', gap: '4px' }}
-            onClick={() => setShowTalukBoundaries(!showTalukBoundaries)}
-            title="Toggle 8 Taluk Boundary Outlines"
-          >
-            <Layers size={13} />
-            <span>Taluks</span>
-          </button>
         </div>
 
         {/* Risk Class Filter */}

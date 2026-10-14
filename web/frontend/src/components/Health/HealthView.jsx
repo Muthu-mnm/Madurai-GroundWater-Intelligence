@@ -172,9 +172,7 @@ export default function HealthView({
                 Health Vulnerability Screening
               </h1>
             </div>
-            <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', marginTop: '4px', maxWidth: '850px' }}>
-              <strong>Top Metrics:</strong> Fluoride, NO₃ (nitrate), TDS, pH, Cl (chloride) &bull; <strong>Purpose:</strong> Drinking-water quality screening against <strong>WHO 2017</strong> &amp; <strong>BIS 10500:2012</strong> toxicological limits. Identifies endemic chemical exposure hazards for Fluoride, Nitrate, mineral TDS load, and Chloride.
-            </p>
+
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--bg-muted)', padding: '6px 12px', borderRadius: '6px' }}>

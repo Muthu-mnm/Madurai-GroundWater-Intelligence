@@ -93,9 +93,6 @@ export default function WaterQualityView({
                 Water Quality Monitoring
               </h1>
             </div>
-            <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', marginTop: '4px', maxWidth: '850px' }}>
-              <strong>Top Metrics:</strong> pH, EC, TDS, Fluoride, NO₃ (nitrate), Cl (chloride), Ca (calcium), Mg (magnesium) &bull; <strong>Purpose:</strong> Identify poor-quality water and monitor changes over time under <strong>BIS 10500:2012</strong> &amp; CPCB specifications across 154 monitoring stations.
-            </p>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--bg-muted)', padding: '6px 12px', borderRadius: '6px' }}>

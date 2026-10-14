@@ -153,9 +153,6 @@ export default function AgricultureView({
                 Agriculture Vulnerability Assessment
               </h1>
             </div>
-            <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', marginTop: '4px', maxWidth: '850px' }}>
-              <strong>Top Metrics:</strong> EC, SAR, RSC, Na%, pH &bull; <strong>Purpose:</strong> Irrigation suitability, salinity and sodium hazards screening based on <strong>FAO 29</strong> &amp; <strong>IS 11624:1986</strong> guidelines.
-            </p>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--bg-muted)', padding: '6px 12px', borderRadius: '6px' }}>

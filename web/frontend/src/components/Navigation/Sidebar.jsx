@@ -190,10 +190,6 @@ export default function Sidebar({
       {!collapsed && (
         <div className="sidebar-footer">
           <div><strong>Study Area:</strong> Madurai District</div>
-          <div><strong>Models:</strong> WQ, Agri, Health & Combined</div>
-          <div style={{ marginTop: '3px', fontSize: '0.68rem', color: 'var(--text-muted)' }}>
-            154 Stations &bull; 8 Taluks &bull; 2007–2030
-          </div>
         </div>
       )}
     </aside>
