@@ -11,7 +11,6 @@ import ForecastExplorer from './components/Forecast/ForecastExplorer';
 import PredictionSimulator from './components/Prediction/PredictionSimulator';
 import ModelValidation from './components/Validation/ModelValidation';
 import DataExplorer from './components/DataExplorer/DataExplorer';
-import OverviewDashboard from './components/Overview/OverviewDashboard';
 import Methodology from './components/Methodology/Methodology';
 import { clientDataService } from './services/dataService';
 import { Droplets } from 'lucide-react';
@@ -226,15 +225,6 @@ export default function App() {
             />
           )}
 
-          {activeTab === 'overview' && (
-            <OverviewDashboard 
-              historicalData={historicalData}
-              forecastData={forecastData}
-              metadata={metadata}
-              onNavigateToMap={() => setActiveTab('map')}
-              onNavigateToPredict={() => setActiveTab('prediction')}
-            />
-          )}
 
           {activeTab === 'methodology' && (
             <Methodology />

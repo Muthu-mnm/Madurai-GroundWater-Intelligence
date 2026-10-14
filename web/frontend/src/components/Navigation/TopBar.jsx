@@ -18,7 +18,6 @@ export default function TopBar({
     prediction: 'Hydrological Simulation & Prediction',
     validation: 'Model Validation & Temporal Evaluation',
     data: 'Data Explorer & Comprehensive Audit',
-    overview: 'District Overview Dashboard',
     methodology: 'System Architecture & Scientific Methodology'
   };
 

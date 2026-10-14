@@ -15,8 +15,7 @@ import {
   Sparkles,
   CheckCircle2,
   Database,
-  BookOpen,
-  LayoutDashboard
+  BookOpen
 } from 'lucide-react';
 
 export default function Sidebar({ 
@@ -45,7 +44,6 @@ export default function Sidebar({
     { id: 'prediction', label: 'Prediction Simulator', icon: Sparkles },
     { id: 'validation', label: 'Model Validation', icon: CheckCircle2 },
     { id: 'data', label: 'Data Explorer', icon: Database },
-    { id: 'overview', label: 'District Overview', icon: LayoutDashboard },
     { id: 'methodology', label: 'Methodology & Guidelines', icon: BookOpen }
   ];
 
