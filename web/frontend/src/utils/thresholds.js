@@ -414,6 +414,137 @@ export function getDrinkingSuitability(riskLevel, record = null) {
   return DRINKING_SUITABILITY['Unassessed'];
 }
 
+export function evaluateMultiDomain(record) {
+  if (!record) {
+    return {
+      wq: { class: 'Insufficient Data', reason: 'No data' },
+      agri: { class: 'Insufficient Data', reason: 'No data', isPartial: false, suitability: 'Unassessed' },
+      health: { class: 'Insufficient Data', reason: 'No data', isPartial: false, concern: 'Unassessed' },
+      combined: { class: 'Insufficient Data', reason: 'No data', score: 0, isPartial: false }
+    };
+  }
+
+  const f = Number(record.Fluoride);
+  const no3 = Number(record.NO3);
+  const tds = Number(record.TDS);
+  const ec = Number(record.EC);
+  const ph = Number(record.pH);
+  const cl = Number(record.Cl);
+  const ca = Number(record.Ca);
+  const mg = Number(record.Mg);
+  const sar = Number(record.SAR);
+  const rsc = Number(record.RSC);
+  const naPct = Number(record['Na%']);
+
+  const hasNo3 = !isNaN(no3) && no3 !== null;
+  const hasCl = !isNaN(cl) && cl !== null;
+  const hasCa = !isNaN(ca) && ca !== null;
+  const hasMg = !isNaN(mg) && mg !== null;
+  const hasSar = !isNaN(sar) && sar !== null;
+  const hasRsc = !isNaN(rsc) && rsc !== null;
+  const hasNaPct = !isNaN(naPct) && naPct !== null;
+
+  // 1. Water Quality Domain (Top Metrics: pH, EC, TDS, Fluoride, NO3, Cl, Ca, Mg)
+  let wqClass = 'Low Vulnerability';
+  let wqReason = 'Within desirable statutory limits';
+  if (isNaN(tds) || isNaN(ec) || isNaN(f) || isNaN(ph)) {
+    wqClass = 'Insufficient Data';
+    wqReason = 'Missing core parameters';
+  } else if (f > 3.0 || tds > 3000 || ec > 4000 || (hasCl && cl > 1500) || (hasNo3 && no3 > 100) || (hasCa && ca > 300) || (hasMg && mg > 150) || ph < 5.0 || ph > 9.5) {
+    wqClass = 'Very High Vulnerability';
+    wqReason = f > 3.0 ? `Severe Fluoride (${f.toFixed(2)} mg/L)` : (tds > 3000 ? `Severe Mineralization (${tds.toFixed(0)} mg/L)` : `Extreme Contaminant Load`);
+  } else if (f > 1.5 || tds > 2000 || ec > 2250 || (hasCl && cl > 1000) || (hasNo3 && no3 > 45) || (hasCa && ca > 200) || (hasMg && mg > 100) || ph < 6.5 || ph > 8.5) {
+    wqClass = 'High Vulnerability';
+    wqReason = f > 1.5 ? `Fluoride Exceedance (${f.toFixed(2)} mg/L > 1.5)` : (tds > 2000 ? `TDS Exceedance (${tds.toFixed(0)} mg/L)` : (hasCl && cl > 1000 ? `Chloride Exceedance (${cl.toFixed(0)} mg/L)` : (hasCa && ca > 200 ? `Calcium Exceedance (${ca.toFixed(1)} mg/L)` : `EC/pH Non-compliance`)));
+  } else if (tds > 500 || f > 1.0 || ec > 750 || (hasCl && cl > 250) || (hasCa && ca > 75) || (hasMg && mg > 30) || (record.Fluoride_Upper_CI && Number(record.Fluoride_Upper_CI) > 1.5)) {
+    wqClass = 'Moderate Vulnerability';
+    wqReason = 'Permissible relaxation / CI breach';
+  }
+
+  // 2. Agriculture Domain (Top Metrics: EC, SAR, RSC, Na%, pH)
+  let agriClass = 'Low Vulnerability';
+  let agriReason = 'Suitable for general irrigation (FAO Class C1/C2)';
+  let agriSuitability = 'Suitable for General Irrigation';
+  const agriPartial = !hasSar || !hasRsc;
+
+  if (isNaN(ec)) {
+    agriClass = 'Insufficient Data';
+    agriReason = 'Missing EC salinity measurement';
+    agriSuitability = 'Unassessed';
+  } else if (ec > 4000 || sar > 26 || rsc > 3.5 || naPct > 80 || ph > 9.0) {
+    agriClass = 'Very High Vulnerability';
+    agriSuitability = 'Unsuitable under Standard Practices';
+    agriReason = ec > 4000 ? `Severe Salinity (${ec.toFixed(0)} µS/cm)` : (rsc > 3.5 ? `Severe RSC (${rsc.toFixed(2)} meq/L)` : (sar > 26 ? `Severe Sodicity (SAR ${sar.toFixed(1)})` : `Severe Alkalinity`));
+  } else if (ec > 2250 || sar > 18 || rsc > 2.5 || naPct > 60 || ph < 6.0) {
+    agriClass = 'High Vulnerability';
+    agriSuitability = 'Severe Restriction (Salt-Tolerant Only)';
+    agriReason = ec > 2250 ? `High Salinity (${ec.toFixed(0)} µS/cm, Class C4)` : (sar > 18 ? `High SAR (${sar.toFixed(1)})` : (rsc > 2.5 ? `High RSC (${rsc.toFixed(2)} meq/L)` : `High Sodium Percentage`));
+  } else if (ec > 750 || sar > 10 || rsc > 1.25 || naPct > 40 || ph > 8.4) {
+    agriClass = 'Moderate Vulnerability';
+    agriSuitability = 'Moderate Restriction';
+    agriReason = ec > 750 ? `Moderate Salinity (${ec.toFixed(0)} µS/cm)` : `Marginal Sodicity/RSC`;
+  }
+
+  // 3. Health Domain (Top Metrics: Fluoride, NO3, TDS, pH, Cl)
+  let healthClass = 'Low Vulnerability';
+  let healthReason = 'Complies with WHO/BIS guidelines';
+  let healthConcern = 'Within safe limits';
+  const healthPartial = !hasNo3;
+
+  if (isNaN(f)) {
+    healthClass = 'Insufficient Data';
+    healthReason = 'Missing Fluoride';
+    healthConcern = 'Unassessed';
+  } else if (f > 3.0 || (hasNo3 && no3 > 100) || tds > 3000 || (hasCl && cl > 1500) || ph < 5.0 || ph > 9.5) {
+    healthClass = 'Very High Vulnerability';
+    healthReason = f > 3.0 ? `Crippling Fluorosis Risk (F ${f.toFixed(2)} mg/L)` : (no3 > 100 ? `Acute Nitrate Hazard (${no3.toFixed(0)} mg/L)` : (cl > 1500 ? `Severe Chloride Toxicity (${cl.toFixed(0)} mg/L)` : `Extreme Mineralization`));
+    healthConcern = healthReason;
+  } else if (f > 1.5 || (hasNo3 && no3 > 45) || tds > 2000 || (hasCl && cl > 1000) || ph < 6.5 || ph > 8.5) {
+    healthClass = 'High Vulnerability';
+    healthReason = f > 1.5 ? `Dental Fluorosis Risk (F ${f.toFixed(2)} mg/L)` : (no3 > 45 ? `Infantile Methemoglobinemia Risk (NO3 ${no3.toFixed(1)} mg/L)` : (cl > 1000 ? `Chloride Exceedance (${cl.toFixed(0)} mg/L)` : `TDS / pH Exceedance`));
+    healthConcern = healthReason;
+  } else if (f > 1.0 || (record.Fluoride_Upper_CI && Number(record.Fluoride_Upper_CI) > 1.5) || tds > 500 || (hasCl && cl > 250)) {
+    healthClass = 'Moderate Vulnerability';
+    healthReason = 'Fluoride in permissible zone or prediction bound breach';
+    healthConcern = healthReason;
+  }
+
+  // 4. Combined Protective Aggregation Rule
+  const domainList = [wqClass, agriClass, healthClass];
+  let combinedClass = 'Low Vulnerability';
+  let protectiveTrigger = 'All domains comply with desirable limits.';
+  let score = 15;
+
+  if (domainList.includes('Very High Vulnerability')) {
+    combinedClass = 'Very High Vulnerability';
+    score = 95;
+    const trig = [];
+    if (healthClass === 'Very High Vulnerability') trig.push('Health Toxic Hazard');
+    if (agriClass === 'Very High Vulnerability') trig.push('Agriculture Severe Salinity/Sodicity');
+    if (wqClass === 'Very High Vulnerability') trig.push('Water Quality Extreme Exceedance');
+    protectiveTrigger = `Protective severity rule: ${trig.join(', ')}`;
+  } else if (domainList.includes('High Vulnerability')) {
+    combinedClass = 'High Vulnerability';
+    score = 75;
+    const trig = [];
+    if (healthClass === 'High Vulnerability') trig.push('Health Risk');
+    if (agriClass === 'High Vulnerability') trig.push('Agriculture Hazard');
+    if (wqClass === 'High Vulnerability') trig.push('Water Quality Exceedance');
+    protectiveTrigger = `Protective severity rule: ${trig.join(', ')}`;
+  } else if (domainList.includes('Moderate Vulnerability')) {
+    combinedClass = 'Moderate Vulnerability';
+    score = 45;
+    protectiveTrigger = 'Composite relaxation zone / moderate constraints.';
+  }
+
+  return {
+    wq: { class: wqClass, reason: wqReason },
+    agri: { class: agriClass, reason: agriReason, isPartial: agriPartial, suitability: agriSuitability },
+    health: { class: healthClass, reason: healthReason, isPartial: healthPartial, concern: healthConcern },
+    combined: { class: combinedClass, reason: protectiveTrigger, score, isPartial: (agriPartial || healthPartial) }
+  };
+}
+
 export function evaluateRisk(row) {
   if (!row) return { 
     level: 'Insufficient Data', 

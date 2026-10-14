@@ -1,6 +1,12 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
-import { THRESHOLDS, RISK_COLORS, DRINKING_SUITABILITY, getDrinkingSuitability } from '../../utils/thresholds';
+import { 
+  THRESHOLDS, 
+  VULNERABILITY_CLASSES, 
+  getVulnerabilityMeta, 
+  evaluateMultiDomain,
+  DOMAIN_METADATA 
+} from '../../utils/thresholds';
 import ExportButton from '../Common/ExportButton';
 import DisclaimerBanner from '../Common/DisclaimerBanner';
 import { 
@@ -13,10 +19,15 @@ import {
   ChevronLeft,
   ChevronRight,
   ShieldCheck,
+  ShieldAlert,
+  Droplet,
+  Wheat,
+  HeartPulse,
+  Sparkles,
+  Sliders,
   CheckCircle2,
   AlertTriangle,
-  Droplets,
-  Sparkles
+  Layers
 } from 'lucide-react';
 
 export default function ForecastExplorer({ 
@@ -25,10 +36,11 @@ export default function ForecastExplorer({
   onNavigateToPredict
 }) {
   const [selectedYear, setSelectedYear] = useState(2026);
-  const [selectedParam, setSelectedParam] = useState('TDS');
-  const [selectedTaluk, setSelectedTaluk] = useState('all');
+  const [selectedDomain, setSelectedDomain] = useState('all'); // 'all' | 'combined' | 'water_quality' | 'agriculture' | 'health'
   const [selectedRisk, setSelectedRisk] = useState('all');
+  const [selectedTaluk, setSelectedTaluk] = useState('all');
   const [searchVillage, setSearchVillage] = useState('');
+  const [selectedParam, setSelectedParam] = useState('TDS');
   
   // Table Pagination & Sorting
   const [page, setPage] = useState(1);
@@ -36,34 +48,90 @@ export default function ForecastExplorer({
   const [sortField, setSortField] = useState('Village');
   const [sortDir, setSortDir] = useState('asc');
 
-  // Selected station for deep dive chart
+  // Selected station for deep-dive trajectory chart
   const [activeStation, setActiveStation] = useState(null);
 
   const forecastChartRef = useRef(null);
   const forecastChartInst = useRef(null);
 
-  // Filtered forecast dataset
+  // Available taluks for filter
+  const talukOptions = useMemo(() => {
+    const set = new Set();
+    forecastData.forEach(d => {
+      if (d.Taluk) set.add(d.Taluk);
+    });
+    return Array.from(set).sort();
+  }, [forecastData]);
+
+  // Evaluated year records with full multi-domain evaluation
+  const evaluatedYearData = useMemo(() => {
+    return forecastData
+      .filter(d => d.Year === selectedYear)
+      .map(d => {
+        const assessment = evaluateMultiDomain(d);
+        return {
+          ...d,
+          multiDomain: assessment
+        };
+      });
+  }, [forecastData, selectedYear]);
+
+  // Domain Summary Statistics for the selected year
+  const domainSummaries = useMemo(() => {
+    const counts = {
+      combined: { 'Very High Vulnerability': 0, 'High Vulnerability': 0, 'Moderate Vulnerability': 0, 'Low Vulnerability': 0 },
+      wq: { 'Very High Vulnerability': 0, 'High Vulnerability': 0, 'Moderate Vulnerability': 0, 'Low Vulnerability': 0 },
+      agri: { 'Very High Vulnerability': 0, 'High Vulnerability': 0, 'Moderate Vulnerability': 0, 'Low Vulnerability': 0 },
+      health: { 'Very High Vulnerability': 0, 'High Vulnerability': 0, 'Moderate Vulnerability': 0, 'Low Vulnerability': 0 }
+    };
+
+    evaluatedYearData.forEach(d => {
+      const { combined, wq, agri, health } = d.multiDomain;
+      if (counts.combined[combined.class] !== undefined) counts.combined[combined.class]++;
+      if (counts.wq[wq.class] !== undefined) counts.wq[wq.class]++;
+      if (counts.agri[agri.class] !== undefined) counts.agri[agri.class]++;
+      if (counts.health[health.class] !== undefined) counts.health[health.class]++;
+    });
+
+    return counts;
+  }, [evaluatedYearData]);
+
+  // Filtered dataset
   const filteredData = useMemo(() => {
-    return forecastData.filter(d => {
-      if (d.Year !== selectedYear) return false;
-      if (selectedTaluk !== 'all' && d.Taluk && d.Taluk.toLowerCase() !== selectedTaluk.toLowerCase()) return false;
-      if (selectedRisk !== 'all') {
-        if (selectedRisk === 'Drinkable' || selectedRisk === 'Required Boiling' || selectedRisk === 'Not Drinkable') {
-          const s = d.Drinking_Suitability || getDrinkingSuitability(d.Risk_Level, d).label;
-          if (s !== selectedRisk) return false;
-        } else if (d.Risk_Level !== selectedRisk) {
-          return false;
-        }
+    return evaluatedYearData.filter(d => {
+      // Taluk filter
+      if (selectedTaluk !== 'all' && d.Taluk && d.Taluk.toLowerCase() !== selectedTaluk.toLowerCase()) {
+        return false;
       }
-      if (searchVillage.trim() && d.Village && !d.Village.toLowerCase().includes(searchVillage.toLowerCase().trim())) return false;
+
+      // Risk Class filter
+      if (selectedRisk !== 'all') {
+        let targetClass = d.multiDomain.combined.class;
+        if (selectedDomain === 'water_quality') targetClass = d.multiDomain.wq.class;
+        else if (selectedDomain === 'agriculture') targetClass = d.multiDomain.agri.class;
+        else if (selectedDomain === 'health') targetClass = d.multiDomain.health.class;
+
+        if (targetClass !== selectedRisk) return false;
+      }
+
+      // Search filter
+      if (searchVillage.trim()) {
+        const q = searchVillage.toLowerCase().trim();
+        const v = (d.Village || '').toLowerCase();
+        const t = (d.Taluk || '').toLowerCase();
+        if (!v.includes(q) && !t.includes(q)) return false;
+      }
+
       return true;
     });
-  }, [forecastData, selectedYear, selectedTaluk, selectedRisk, searchVillage]);
+  }, [evaluatedYearData, selectedTaluk, selectedRisk, selectedDomain, searchVillage]);
 
-  // Set default active station if none selected
+  // Set default active station if none selected or if filtered out
   useEffect(() => {
     if (!activeStation && filteredData.length > 0) {
       setActiveStation(filteredData[0]);
+    } else if (activeStation && !filteredData.find(d => d.Village === activeStation.Village)) {
+      if (filteredData.length > 0) setActiveStation(filteredData[0]);
     }
   }, [filteredData, activeStation]);
 
@@ -72,6 +140,22 @@ export default function ForecastExplorer({
     const sorted = [...filteredData].sort((a, b) => {
       let va = a[sortField];
       let vb = b[sortField];
+
+      // Support sorting by multi-domain classes
+      if (sortField === 'Combined') {
+        va = a.multiDomain.combined.score;
+        vb = b.multiDomain.combined.score;
+      } else if (sortField === 'WaterQuality') {
+        va = a.multiDomain.wq.class;
+        vb = b.multiDomain.wq.class;
+      } else if (sortField === 'Agriculture') {
+        va = a.multiDomain.agri.class;
+        vb = b.multiDomain.agri.class;
+      } else if (sortField === 'Health') {
+        va = a.multiDomain.health.class;
+        vb = b.multiDomain.health.class;
+      }
+
       if (va === null || va === undefined) return 1;
       if (vb === null || vb === undefined) return -1;
       if (typeof va === 'string') {
@@ -125,6 +209,9 @@ export default function ForecastExplorer({
       }
     }
 
+    const paramMeta = THRESHOLDS[selectedParam] || {};
+    const unitStr = paramMeta.unit ? ` (${paramMeta.unit})` : '';
+
     const ctx = forecastChartRef.current.getContext('2d');
     forecastChartInst.current = new Chart(ctx, {
       type: 'line',
@@ -132,29 +219,29 @@ export default function ForecastExplorer({
         labels,
         datasets: [
           {
-            label: `Historical Observed (${THRESHOLDS[selectedParam]?.unit || ''})`,
+            label: `Historical Observed${unitStr}`,
             data: histVals,
-            borderColor: '#176B70',
-            backgroundColor: '#176B70',
+            borderColor: '#0f766e',
+            backgroundColor: '#0f766e',
             borderWidth: 2.2,
             pointRadius: 4,
             tension: 0.1
           },
           {
-            label: `Adaptive Ensemble Point Forecast`,
+            label: `Adaptive Ensemble Forecast${unitStr}`,
             data: fcVals,
-            borderColor: '#397A9B',
-            backgroundColor: '#397A9B',
+            borderColor: '#0284c7',
+            backgroundColor: '#0284c7',
             borderWidth: 2.2,
             borderDash: [5, 5],
-            pointRadius: 3,
+            pointRadius: 3.5,
             tension: 0.1
           },
           {
             label: `Upper Prediction Bound (Nominal 80% CI)`,
             data: fcUpperVals,
-            borderColor: 'rgba(57, 122, 155, 0.4)',
-            backgroundColor: 'rgba(57, 122, 155, 0.14)',
+            borderColor: 'rgba(2, 132, 199, 0.4)',
+            backgroundColor: 'rgba(2, 132, 199, 0.12)',
             fill: '+1',
             borderWidth: 1,
             pointRadius: 0
@@ -162,7 +249,7 @@ export default function ForecastExplorer({
           {
             label: `Lower Prediction Bound (Nominal 80% CI)`,
             data: fcLowerVals,
-            borderColor: 'rgba(57, 122, 155, 0.4)',
+            borderColor: 'rgba(2, 132, 199, 0.4)',
             backgroundColor: 'transparent',
             fill: false,
             borderWidth: 1,
@@ -189,8 +276,8 @@ export default function ForecastExplorer({
             grid: { color: '#E2E8EC' },
             title: {
               display: true,
-              text: `${selectedParam} (${THRESHOLDS[selectedParam]?.unit || ''})`,
-              font: { size: 11, family: 'Inter' }
+              text: `${paramMeta.name || selectedParam}${unitStr}`,
+              font: { size: 11, family: 'Inter', weight: 600 }
             }
           }
         }
@@ -211,15 +298,17 @@ export default function ForecastExplorer({
     }
   };
 
+  const activeAssessment = activeStation ? (activeStation.multiDomain || evaluateMultiDomain(activeStation)) : null;
+
   return (
     <div className="content-workspace">
       <DisclaimerBanner />
 
-      {/* Interactive Prediction Input Simulator Callout */}
+      {/* Simulator Shortcut Banner */}
       {onNavigateToPredict && (
         <div style={{
-          backgroundColor: 'rgba(23, 107, 112, 0.08)',
-          border: '1.5px solid rgba(23, 107, 112, 0.25)',
+          backgroundColor: 'rgba(15, 118, 110, 0.08)',
+          border: '1.5px solid rgba(15, 118, 110, 0.25)',
           borderRadius: '8px',
           padding: '12px 18px',
           marginBottom: '16px',
@@ -230,15 +319,15 @@ export default function ForecastExplorer({
           gap: '12px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ backgroundColor: 'var(--accent-primary)', color: '#fff', padding: '6px', borderRadius: '6px' }}>
+            <div style={{ backgroundColor: '#0f766e', color: '#fff', padding: '6px', borderRadius: '6px' }}>
               <Sparkles size={16} />
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--text-primary)' }}>
-                Want to enter custom chemical inputs or simulate future drought / climate scenarios?
+                Simulate Custom Groundwater Stress &amp; Climate Scenarios
               </div>
               <div style={{ fontSize: '0.76rem', color: 'var(--text-secondary)' }}>
-                Use the new Prediction Simulator to test custom TDS, EC, Fluoride, and pH values up to 2035 with real-time potability assessment.
+                Test custom chemical concentrations across all 4 domains up to 2035 with real-time multi-domain screening.
               </div>
             </div>
           </div>
@@ -252,10 +341,146 @@ export default function ForecastExplorer({
         </div>
       )}
 
-      {/* Control Toolbar */}
+      {/* 4 Core Domain Overview Cards */}
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', 
+        gap: '12px',
+        marginBottom: '14px' 
+      }}>
+        {/* Combiner Card */}
+        <div 
+          className="card"
+          onClick={() => { setSelectedDomain(selectedDomain === 'combined' ? 'all' : 'combined'); setPage(1); }}
+          style={{ 
+            padding: '12px 14px', 
+            borderLeft: '4px solid #0f766e',
+            background: selectedDomain === 'combined' ? '#f0fdfa' : 'var(--bg-surface)',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease'
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <ShieldAlert size={16} style={{ color: '#0f766e' }} />
+              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>Combiner Assessment</span>
+            </div>
+            <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#0f766e', background: '#ccfbf1', padding: '1px 6px', borderRadius: '4px' }}>
+              Protective
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '8px', fontSize: '0.74rem' }}>
+            <div><strong style={{ color: '#dc2626' }}>{domainSummaries.combined['Very High Vulnerability']}</strong> Critical</div>
+            <div><strong style={{ color: '#ea580c' }}>{domainSummaries.combined['High Vulnerability']}</strong> High</div>
+            <div><strong style={{ color: '#d97706' }}>{domainSummaries.combined['Moderate Vulnerability']}</strong> Mod</div>
+            <div><strong style={{ color: '#0d9488' }}>{domainSummaries.combined['Low Vulnerability']}</strong> Low</div>
+          </div>
+          <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+            Protective precedence: severe risk in any domain cannot be masked.
+          </div>
+        </div>
+
+        {/* Water Quality Domain Card */}
+        <div 
+          className="card"
+          onClick={() => { setSelectedDomain(selectedDomain === 'water_quality' ? 'all' : 'water_quality'); setPage(1); }}
+          style={{ 
+            padding: '12px 14px', 
+            borderLeft: '4px solid #0284c7',
+            background: selectedDomain === 'water_quality' ? '#f0f9ff' : 'var(--bg-surface)',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease'
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Droplet size={16} style={{ color: '#0284c7' }} />
+              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>Water Quality</span>
+            </div>
+            <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#0284c7', background: '#e0f2fe', padding: '1px 6px', borderRadius: '4px' }}>
+              BIS IS 10500
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '8px', fontSize: '0.74rem' }}>
+            <div><strong style={{ color: '#dc2626' }}>{domainSummaries.wq['Very High Vulnerability']}</strong> Extreme</div>
+            <div><strong style={{ color: '#ea580c' }}>{domainSummaries.wq['High Vulnerability']}</strong> Exceed</div>
+            <div><strong style={{ color: '#d97706' }}>{domainSummaries.wq['Moderate Vulnerability']}</strong> Permissible</div>
+            <div><strong style={{ color: '#0d9488' }}>{domainSummaries.wq['Low Vulnerability']}</strong> Safe</div>
+          </div>
+          <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+            TDS, EC, F, pH, Ca, Mg, Cl, NO3 compliance screening.
+          </div>
+        </div>
+
+        {/* Agriculture Domain Card */}
+        <div 
+          className="card"
+          onClick={() => { setSelectedDomain(selectedDomain === 'agriculture' ? 'all' : 'agriculture'); setPage(1); }}
+          style={{ 
+            padding: '12px 14px', 
+            borderLeft: '4px solid #16a34a',
+            background: selectedDomain === 'agriculture' ? '#f0fdf4' : 'var(--bg-surface)',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease'
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Wheat size={16} style={{ color: '#16a34a' }} />
+              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>Agriculture Screening</span>
+            </div>
+            <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#16a34a', background: '#dcfce7', padding: '1px 6px', borderRadius: '4px' }}>
+              FAO / Richards
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '8px', fontSize: '0.74rem' }}>
+            <div><strong style={{ color: '#dc2626' }}>{domainSummaries.agri['Very High Vulnerability']}</strong> Severe</div>
+            <div><strong style={{ color: '#ea580c' }}>{domainSummaries.agri['High Vulnerability']}</strong> Restrict</div>
+            <div><strong style={{ color: '#d97706' }}>{domainSummaries.agri['Moderate Vulnerability']}</strong> Mod</div>
+            <div><strong style={{ color: '#0d9488' }}>{domainSummaries.agri['Low Vulnerability']}</strong> Suitable</div>
+          </div>
+          <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+            Salinity (EC) and sodicity (SAR, RSC, Na%) hazard evaluation.
+          </div>
+        </div>
+
+        {/* Health Screening Domain Card */}
+        <div 
+          className="card"
+          onClick={() => { setSelectedDomain(selectedDomain === 'health' ? 'all' : 'health'); setPage(1); }}
+          style={{ 
+            padding: '12px 14px', 
+            borderLeft: '4px solid #dc2626',
+            background: selectedDomain === 'health' ? '#fef2f2' : 'var(--bg-surface)',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease'
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <HeartPulse size={16} style={{ color: '#dc2626' }} />
+              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>Health Screening</span>
+            </div>
+            <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#dc2626', background: '#fee2e2', padding: '1px 6px', borderRadius: '4px' }}>
+              WHO Toxicological
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '8px', fontSize: '0.74rem' }}>
+            <div><strong style={{ color: '#dc2626' }}>{domainSummaries.health['Very High Vulnerability']}</strong> Toxic</div>
+            <div><strong style={{ color: '#ea580c' }}>{domainSummaries.health['High Vulnerability']}</strong> Fluorosis</div>
+            <div><strong style={{ color: '#d97706' }}>{domainSummaries.health['Moderate Vulnerability']}</strong> Permissible</div>
+            <div><strong style={{ color: '#0d9488' }}>{domainSummaries.health['Low Vulnerability']}</strong> Safe</div>
+          </div>
+          <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+            Dental/skeletal fluorosis and infant methemoglobinemia risk.
+          </div>
+        </div>
+      </div>
+
+      {/* Control Filter Toolbar */}
       <div className="filter-toolbar">
         <div className="filter-group">
-          <span className="filter-label"><Calendar size={14} style={{ display: 'inline', marginRight: 4 }} /> Horizon Year:</span>
+          <span className="filter-label"><Calendar size={14} style={{ display: 'inline', marginRight: 4 }} /> Horizon:</span>
           <select 
             className="filter-select"
             value={selectedYear}
@@ -268,16 +493,32 @@ export default function ForecastExplorer({
         </div>
 
         <div className="filter-group">
-          <span className="filter-label"><Filter size={14} style={{ display: 'inline', marginRight: 4 }} /> Parameter:</span>
+          <span className="filter-label"><Layers size={14} style={{ display: 'inline', marginRight: 4 }} /> Domain:</span>
           <select 
             className="filter-select"
-            value={selectedParam}
-            onChange={(e) => setSelectedParam(e.target.value)}
+            value={selectedDomain}
+            onChange={(e) => { setSelectedDomain(e.target.value); setPage(1); }}
           >
-            <option value="TDS">TDS — Total Dissolved Solids (mg/L)</option>
-            <option value="EC">EC — Electrical Conductivity (µS/cm)</option>
-            <option value="Fluoride">Fluoride — Fluoride (mg/L)</option>
-            <option value="pH">pH — Sorensen Scale</option>
+            <option value="all">All Domains (Side-by-Side)</option>
+            <option value="combined">Combiner (Combined Risk)</option>
+            <option value="water_quality">Water Quality Domain</option>
+            <option value="agriculture">Agriculture Domain</option>
+            <option value="health">Health Screening Domain</option>
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <span className="filter-label"><Filter size={14} style={{ display: 'inline', marginRight: 4 }} /> Severity:</span>
+          <select 
+            className="filter-select"
+            value={selectedRisk}
+            onChange={(e) => { setSelectedRisk(e.target.value); setPage(1); }}
+          >
+            <option value="all">All Severities</option>
+            <option value="Very High Vulnerability">Critical / Very High Vulnerability</option>
+            <option value="High Vulnerability">High Vulnerability</option>
+            <option value="Moderate Vulnerability">Moderate Vulnerability</option>
+            <option value="Low Vulnerability">Low Vulnerability</option>
           </select>
         </div>
 
@@ -288,36 +529,10 @@ export default function ForecastExplorer({
             value={selectedTaluk}
             onChange={(e) => { setSelectedTaluk(e.target.value); setPage(1); }}
           >
-            <option value="all">All 7 Taluks</option>
-            <option value="Madurai North">Madurai North</option>
-            <option value="Madurai South">Madurai South</option>
-            <option value="Melur">Melur</option>
-            <option value="Peraiyur">Peraiyur</option>
-            <option value="Thirumangalam">Thirumangalam</option>
-            <option value="Usilampatti">Usilampatti</option>
-            <option value="Vadipatti">Vadipatti</option>
-          </select>
-        </div>
-
-        <div className="filter-group">
-          <span className="filter-label">Potability &amp; Risk:</span>
-          <select 
-            className="filter-select"
-            value={selectedRisk}
-            onChange={(e) => { setSelectedRisk(e.target.value); setPage(1); }}
-          >
-            <option value="all">All Statuses ({forecastData.filter(d => d.Year === selectedYear).length})</option>
-            <optgroup label="Drinking Suitability (Potability)">
-              <option value="Drinkable">🟢 Drinkable (Low Risk)</option>
-              <option value="Required Boiling">🟡 Required Boiling (Medium)</option>
-              <option value="Not Drinkable">🔴 Not Drinkable (High Risk)</option>
-            </optgroup>
-            <optgroup label="Regulatory Risk Category">
-              <option value="Low Risk">Low Risk (Desirable)</option>
-              <option value="Medium Risk (Permissible)">Medium Risk (Permissible)</option>
-              <option value="Medium Risk (Borderline)">Medium Risk (Borderline)</option>
-              <option value="High Risk">High Risk (Exceedance)</option>
-            </optgroup>
+            <option value="all">All Taluks ({talukOptions.length})</option>
+            {talukOptions.map(t => (
+              <option key={t} value={t}>{t}</option>
+            ))}
           </select>
         </div>
 
@@ -325,7 +540,7 @@ export default function ForecastExplorer({
           <input 
             type="text"
             className="filter-input"
-            placeholder="Search village..."
+            placeholder="Search village or taluk..."
             value={searchVillage}
             onChange={(e) => { setSearchVillage(e.target.value); setPage(1); }}
             style={{ width: '100%' }}
@@ -337,8 +552,15 @@ export default function ForecastExplorer({
             Taluk: r.Taluk,
             Village: r.Village,
             Year: r.Year,
-            Drinking_Suitability: r.Drinking_Suitability || getDrinkingSuitability(r.Risk_Level, r).label,
-            Risk_Level: r.Risk_Level,
+            Combined_Vulnerability_Class: r.multiDomain.combined.class,
+            Combined_Composite_Score: r.multiDomain.combined.score,
+            Combined_Protective_Trigger: r.multiDomain.combined.reason,
+            Water_Quality_Class: r.multiDomain.wq.class,
+            Water_Quality_Reason: r.multiDomain.wq.reason,
+            Agriculture_Class: r.multiDomain.agri.class,
+            Agriculture_Suitability: r.multiDomain.agri.suitability,
+            Health_Screening_Class: r.multiDomain.health.class,
+            Health_Screening_Concern: r.multiDomain.health.concern,
             TDS_mg_L: r.TDS,
             TDS_Lower_CI: r.TDS_Lower_CI,
             TDS_Upper_CI: r.TDS_Upper_CI,
@@ -351,56 +573,139 @@ export default function ForecastExplorer({
             pH: r.pH,
             pH_Lower_CI: r.pH_Lower_CI,
             pH_Upper_CI: r.pH_Upper_CI,
-            Water_Quality_Status: r.Water_Quality_Status,
-            Risk_Description: r.Risk_Description,
-            Model_Selected: r.Model_Selected
+            NO3_mg_L: r.NO3,
+            Cl_mg_L: r.Cl,
+            Ca_mg_L: r.Ca,
+            Mg_mg_L: r.Mg,
+            SAR: r.SAR,
+            RSC: r.RSC,
+            Na_percent: r['Na%'],
+            Model_Selected: r.Model_Selected || 'Adaptive Ensemble'
           }))}
-          filename={`madurai_forecast_predictions_${selectedYear}.csv`}
+          filename={`madurai_multi_domain_forecast_${selectedYear}.csv`}
           label="Export Predictions CSV"
         />
       </div>
 
-      {/* Deep-Dive Trend Visualization for Active Station */}
-      {activeStation && (
+      {/* Deep-Dive Trajectory Visualization for Active Station */}
+      {activeStation && activeAssessment && (
         <div className="card">
           <div className="card-header">
             <div>
               <h3 className="card-title">
-                <TrendingUp size={16} style={{ color: 'var(--accent-primary)' }} />
+                <TrendingUp size={16} style={{ color: '#0f766e' }} />
                 Longitudinal Station Trajectory: {activeStation.Village} ({activeStation.Taluk})
               </h3>
               <p className="card-subtitle">
-                Model: <strong>Adaptive Ensemble</strong> | Calibration: <strong>Empirical Bayes Residual Scaling</strong> | Interval: <strong>Nominal 80% empirically calibrated prediction interval</strong>
+                Adaptive Ensemble Model &bull; Empirical Bayes Residual Scaling &bull; Nominal 80% CI
               </p>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+
+            {/* 4 Multi-Domain Badges for Active Station */}
+            <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+              {/* Combiner Badge */}
               {(() => {
-                const sLabel = activeStation.Drinking_Suitability || getDrinkingSuitability(activeStation.Risk_Level, activeStation).label;
-                const sMeta = DRINKING_SUITABILITY[sLabel] || DRINKING_SUITABILITY['Unassessed'];
+                const meta = getVulnerabilityMeta(activeAssessment.combined.class);
                 return (
-                  <span className={`suitability-badge ${sMeta.badgeClass}`} style={{ fontSize: '0.78rem', padding: '4px 10px' }}>
-                    {sMeta.symbol} {sLabel}
+                  <span className={meta.badgeClass} title={`Combiner Score: ${activeAssessment.combined.score}/100`}>
+                    🛡️ Combiner: {activeAssessment.combined.class.replace(' Vulnerability', '')}
                   </span>
                 );
               })()}
-              <span className={`risk-tag ${RISK_COLORS[activeStation.Risk_Level]?.badgeClass || ''}`} style={{ fontSize: '0.78rem', padding: '4px 10px' }}>
-                {activeStation.Risk_Level}
-              </span>
+
+              {/* Water Quality Badge */}
+              {(() => {
+                const meta = getVulnerabilityMeta(activeAssessment.wq.class);
+                return (
+                  <span className={meta.badgeClass} title={activeAssessment.wq.reason}>
+                    💧 WQ: {activeAssessment.wq.class.replace(' Vulnerability', '')}
+                  </span>
+                );
+              })()}
+
+              {/* Agriculture Badge */}
+              {(() => {
+                const meta = getVulnerabilityMeta(activeAssessment.agri.class);
+                return (
+                  <span className={meta.badgeClass} title={activeAssessment.agri.reason}>
+                    🌾 Agri: {activeAssessment.agri.class.replace(' Vulnerability', '')}
+                    {activeAssessment.agri.isPartial && '*'}
+                  </span>
+                );
+              })()}
+
+              {/* Health Badge */}
+              {(() => {
+                const meta = getVulnerabilityMeta(activeAssessment.health.class);
+                return (
+                  <span className={meta.badgeClass} title={activeAssessment.health.concern}>
+                    🩺 Health: {activeAssessment.health.class.replace(' Vulnerability', '')}
+                    {activeAssessment.health.isPartial && '*'}
+                  </span>
+                );
+              })()}
             </div>
           </div>
+
+          {/* Chart Parameter Selector Strip */}
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            padding: '6px 0 10px 0',
+            borderBottom: '1px solid var(--border-light)',
+            marginBottom: '10px',
+            flexWrap: 'wrap',
+            gap: '8px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                Trajectory Parameter:
+              </span>
+              <select 
+                className="filter-select"
+                value={selectedParam}
+                onChange={(e) => setSelectedParam(e.target.value)}
+                style={{ fontSize: '0.78rem', padding: '3px 8px' }}
+              >
+                <option value="TDS">TDS — Total Dissolved Solids (mg/L)</option>
+                <option value="EC">EC — Electrical Conductivity (µS/cm)</option>
+                <option value="Fluoride">Fluoride — Fluoride (mg/L)</option>
+                <option value="pH">pH — Sorensen Scale</option>
+                <option value="NO3">NO3 — Nitrate (mg/L)</option>
+                <option value="Cl">Cl — Chloride (mg/L)</option>
+                <option value="Ca">Ca — Calcium (mg/L)</option>
+                <option value="Mg">Mg — Magnesium (mg/L)</option>
+                <option value="SAR">SAR — Sodium Adsorption Ratio</option>
+                <option value="RSC">RSC — Residual Sodium Carbonate (meq/L)</option>
+                <option value="Na%">Na% — Soluble Sodium Percentage (%)</option>
+              </select>
+            </div>
+
+            <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)' }}>
+              Desirable: <strong>{THRESHOLDS[selectedParam]?.desirable ?? '—'}</strong> &bull; Permissible: <strong>{THRESHOLDS[selectedParam]?.permissible ?? '—'}</strong> {THRESHOLDS[selectedParam]?.unit || ''}
+            </div>
+          </div>
+
           <div style={{ height: '280px', width: '100%' }}>
             <canvas ref={forecastChartRef}></canvas>
           </div>
         </div>
       )}
 
-      {/* Forecast Table */}
+      {/* Multi-Domain Forecast Table */}
       <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-        <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ 
+          padding: '14px 18px', 
+          borderBottom: '1px solid var(--border-light)', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between' 
+        }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <TableIcon size={16} style={{ color: 'var(--accent-primary)' }} />
+            <TableIcon size={16} style={{ color: '#0f766e' }} />
             <h3 style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-              Calibrated Groundwater Quality Forecasts ({selectedYear}) — {filteredData.length} Stations
+              Multi-Domain Groundwater Forecasts ({selectedYear}) — {filteredData.length} Stations
             </h3>
           </div>
           <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
@@ -412,58 +717,97 @@ export default function ForecastExplorer({
           <table className="data-table">
             <thead>
               <tr>
-                <th className="sortable" onClick={() => handleSort('Village')}>Village</th>
+                <th className="sortable" onClick={() => handleSort('Village')}>Station / Village</th>
                 <th className="sortable" onClick={() => handleSort('Taluk')}>Taluk</th>
-                <th>Drinking Suitability</th>
-                <th className="sortable" onClick={() => handleSort('Risk_Level')}>Risk Level</th>
-                <th className="sortable" onClick={() => handleSort('TDS')}>TDS (mg/L) [80% CI]</th>
-                <th className="sortable" onClick={() => handleSort('EC')}>EC (µS/cm) [80% CI]</th>
-                <th className="sortable" onClick={() => handleSort('Fluoride')}>Fluoride (mg/L) [80% CI]</th>
+                <th className="sortable" onClick={() => handleSort('Combined')}>Combiner Risk</th>
+                <th className="sortable" onClick={() => handleSort('WaterQuality')}>Water Quality</th>
+                <th className="sortable" onClick={() => handleSort('Agriculture')}>Agriculture</th>
+                <th className="sortable" onClick={() => handleSort('Health')}>Health Screening</th>
+                <th className="sortable" onClick={() => handleSort('TDS')}>TDS [80% CI]</th>
+                <th className="sortable" onClick={() => handleSort('EC')}>EC [80% CI]</th>
+                <th className="sortable" onClick={() => handleSort('Fluoride')}>Fluoride [80% CI]</th>
                 <th className="sortable" onClick={() => handleSort('pH')}>pH [80% CI]</th>
-                <th>Trigger Assessment</th>
-                <th className="sortable" onClick={() => handleSort('Last_Observed_Year')}>Last Obs</th>
+                <th>Governing Reason</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
               {paginatedRecords.map((r, i) => {
                 const isSelected = activeStation && activeStation.Village === r.Village;
-                const sLabel = r.Drinking_Suitability || getDrinkingSuitability(r.Risk_Level, r).label;
-                const sMeta = DRINKING_SUITABILITY[sLabel] || DRINKING_SUITABILITY['Unassessed'];
+                const ass = r.multiDomain;
+                const cMeta = getVulnerabilityMeta(ass.combined.class);
+                const wMeta = getVulnerabilityMeta(ass.wq.class);
+                const aMeta = getVulnerabilityMeta(ass.agri.class);
+                const hMeta = getVulnerabilityMeta(ass.health.class);
+
                 return (
                   <tr 
                     key={`${r.Taluk}-${r.Village}-${i}`}
-                    style={{ backgroundColor: isSelected ? 'var(--accent-primary-light)' : undefined, cursor: 'pointer' }}
+                    style={{ backgroundColor: isSelected ? 'rgba(15, 118, 110, 0.08)' : undefined, cursor: 'pointer' }}
                     onClick={() => setActiveStation(r)}
                   >
                     <td><strong>{r.Village}</strong></td>
                     <td>{r.Taluk}</td>
+
+                    {/* Combiner Risk */}
                     <td>
-                      <span className={`suitability-badge ${sMeta.badgeClass}`}>
-                        {sMeta.symbol} {sLabel}
+                      <span className={cMeta.badgeClass} title={`Score: ${ass.combined.score}/100`}>
+                        {ass.combined.class.replace(' Vulnerability', '')}
                       </span>
                     </td>
+
+                    {/* Water Quality */}
                     <td>
-                      <span className={`risk-tag ${RISK_COLORS[r.Risk_Level]?.badgeClass || ''}`}>
-                        {r.Risk_Level}
+                      <span className={wMeta.badgeClass} title={ass.wq.reason}>
+                        {ass.wq.class.replace(' Vulnerability', '')}
                       </span>
                     </td>
+
+                    {/* Agriculture */}
                     <td>
-                      {r.TDS?.toFixed(1)} <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>[{r.TDS_Lower_CI?.toFixed(0)}, {r.TDS_Upper_CI?.toFixed(0)}]</span>
+                      <span className={aMeta.badgeClass} title={ass.agri.reason}>
+                        {ass.agri.class.replace(' Vulnerability', '')}
+                        {ass.agri.isPartial && <span style={{ opacity: 0.75, marginLeft: 2 }}>*</span>}
+                      </span>
                     </td>
+
+                    {/* Health Screening */}
                     <td>
-                      {r.EC?.toFixed(1)} <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>[{r.EC_Lower_CI?.toFixed(0)}, {r.EC_Upper_CI?.toFixed(0)}]</span>
+                      <span className={hMeta.badgeClass} title={ass.health.concern}>
+                        {ass.health.class.replace(' Vulnerability', '')}
+                        {ass.health.isPartial && <span style={{ opacity: 0.75, marginLeft: 2 }}>*</span>}
+                      </span>
                     </td>
+
+                    {/* TDS */}
                     <td>
-                      {r.Fluoride?.toFixed(2)} <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>[{r.Fluoride_Lower_CI?.toFixed(2)}, {r.Fluoride_Upper_CI?.toFixed(2)}]</span>
+                      {r.TDS?.toFixed(0)} <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>[{r.TDS_Lower_CI?.toFixed(0)}, {r.TDS_Upper_CI?.toFixed(0)}]</span>
                     </td>
+
+                    {/* EC */}
                     <td>
-                      {r.pH?.toFixed(2)} <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>[{r.pH_Lower_CI?.toFixed(2)}, {r.pH_Upper_CI?.toFixed(2)}]</span>
+                      {r.EC?.toFixed(0)} <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>[{r.EC_Lower_CI?.toFixed(0)}, {r.EC_Upper_CI?.toFixed(0)}]</span>
                     </td>
-                    <td style={{ maxWidth: '240px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={r.Risk_Description}>
-                      {r.Risk_Description}
+
+                    {/* Fluoride */}
+                    <td>
+                      {r.Fluoride?.toFixed(2)} <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>[{r.Fluoride_Lower_CI?.toFixed(2)}, {r.Fluoride_Upper_CI?.toFixed(2)}]</span>
                     </td>
-                    <td>{r.Last_Observed_Year} ({r.Elapsed_Since_Last_Observation}y ago)</td>
+
+                    {/* pH */}
+                    <td>
+                      {r.pH?.toFixed(2)} <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>[{r.pH_Lower_CI?.toFixed(2)}, {r.pH_Upper_CI?.toFixed(2)}]</span>
+                    </td>
+
+                    {/* Protective Reason */}
+                    <td 
+                      style={{ maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} 
+                      title={ass.combined.reason}
+                    >
+                      {ass.combined.reason}
+                    </td>
+
+                    {/* Action */}
                     <td>
                       <button 
                         className="btn btn-secondary btn-sm"
@@ -478,8 +822,8 @@ export default function ForecastExplorer({
               })}
               {paginatedRecords.length === 0 && (
                 <tr>
-                  <td colSpan={10} style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
-                    No forecast predictions match the specified search and filter criteria.
+                  <td colSpan={12} style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                    No forecast predictions match the specified multi-domain filters.
                   </td>
                 </tr>
               )}
