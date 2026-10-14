@@ -24,7 +24,7 @@ export default function TopBar({
   };
 
   const subtitles = {
-    map: 'Thematic vulnerability mapping across 154 stations and 8 taluks of Madurai District with dynamic domain layer styling.',
+    map: '',
     water_quality: 'Identify poor-quality water and monitor changes over time (BIS 10500:2012 & CPCB).',
     agriculture: 'Irrigation suitability, salinity and sodium hazards (FAO 29 & IS 11624:1986).',
     health: 'Drinking-water quality screening (WHO 2017 & BIS 10500:2012).',
@@ -50,7 +50,7 @@ export default function TopBar({
         </button>
         <div>
           <h1 className="topbar-title">{titles[activeTab] || 'Madurai Groundwater Intelligence'}</h1>
-          <p className="topbar-subtitle">{subtitles[activeTab] || ''}</p>
+          {subtitles[activeTab] && <p className="topbar-subtitle">{subtitles[activeTab]}</p>}
         </div>
       </div>
 
