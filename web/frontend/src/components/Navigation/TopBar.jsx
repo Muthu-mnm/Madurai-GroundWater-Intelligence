@@ -25,7 +25,7 @@ export default function TopBar({
 
   const subtitles = {
     map: 'Thematic vulnerability mapping across 154 stations and 8 taluks of Madurai District with dynamic domain layer styling.',
-    water_quality: 'Top metrics: pH, EC, TDS, Fluoride, NO₃, Cl | Purpose: Identify poor-quality water and monitor changes over time (BIS 10500:2012 & CPCB).',
+    water_quality: 'Top metrics: pH, EC, TDS, Fluoride, NO₃, Cl, Ca, Mg | Purpose: Identify poor-quality water and monitor changes over time (BIS 10500:2012 & CPCB).',
     agriculture: 'Top metrics: EC, SAR, RSC, Na%, pH | Purpose: Irrigation suitability, salinity and sodium hazards (FAO 29 & IS 11624:1986).',
     health: 'Top metrics: Fluoride, NO₃, TDS, pH, Cl | Purpose: Drinking-water quality screening (WHO 2017 & BIS 10500:2012).',
     combined: 'Protective multi-domain composite rule engine integrating Water Quality, Agriculture, and Health screening.',

@@ -94,7 +94,7 @@ export default function WaterQualityView({
               </h1>
             </div>
             <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', marginTop: '4px', maxWidth: '850px' }}>
-              <strong>Top Metrics:</strong> pH, EC, TDS, Fluoride, NO₃ (nitrate), Cl (chloride) &bull; <strong>Purpose:</strong> Identify poor-quality water and monitor changes over time under <strong>BIS 10500:2012</strong> &amp; CPCB specifications across 154 monitoring stations.
+              <strong>Top Metrics:</strong> pH, EC, TDS, Fluoride, NO₃ (nitrate), Cl (chloride), Ca (calcium), Mg (magnesium) &bull; <strong>Purpose:</strong> Identify poor-quality water and monitor changes over time under <strong>BIS 10500:2012</strong> &amp; CPCB specifications across 154 monitoring stations.
             </p>
           </div>
 
@@ -241,6 +241,8 @@ export default function WaterQualityView({
                 <th>Fluoride (mg/L)</th>
                 <th>NO₃ (mg/L)</th>
                 <th>Cl (mg/L)</th>
+                <th>Ca (mg/L)</th>
+                <th>Mg (mg/L)</th>
                 <th>Water Quality Risk Class</th>
                 <th>Screening Trigger / Reason</th>
               </tr>
@@ -248,7 +250,7 @@ export default function WaterQualityView({
             <tbody>
               {filteredRecords.length === 0 ? (
                 <tr>
-                  <td colSpan="10" style={{ textAlign: 'center', padding: '24px', color: 'var(--text-muted)' }}>
+                  <td colSpan="12" style={{ textAlign: 'center', padding: '24px', color: 'var(--text-muted)' }}>
                     No stations match the selected filter criteria for {selectedYear}.
                   </td>
                 </tr>
@@ -294,6 +296,18 @@ export default function WaterQualityView({
                           {r.Cl !== undefined && r.Cl !== null ? Number(r.Cl).toFixed(0) : '—'}
                         </span>
                         {r.Cl_Upper_CI && <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>CI: {Number(r.Cl_Lower_CI).toFixed(0)}–{Number(r.Cl_Upper_CI).toFixed(0)}</span>}
+                      </td>
+                      <td>
+                        <span style={{ fontWeight: 600, color: r.Ca > 200 ? '#dc2626' : (r.Ca > 75 ? '#d97706' : 'inherit') }}>
+                          {r.Ca !== undefined && r.Ca !== null && !isNaN(Number(r.Ca)) ? Number(r.Ca).toFixed(1) : '—'}
+                        </span>
+                        {r.Ca_Upper_CI && <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>CI: {Number(r.Ca_Lower_CI).toFixed(0)}–{Number(r.Ca_Upper_CI).toFixed(0)}</span>}
+                      </td>
+                      <td>
+                        <span style={{ fontWeight: 600, color: r.Mg > 100 ? '#dc2626' : (r.Mg > 30 ? '#d97706' : 'inherit') }}>
+                          {r.Mg !== undefined && r.Mg !== null && !isNaN(Number(r.Mg)) ? Number(r.Mg).toFixed(1) : '—'}
+                        </span>
+                        {r.Mg_Upper_CI && <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>CI: {Number(r.Mg_Lower_CI).toFixed(0)}–{Number(r.Mg_Upper_CI).toFixed(0)}</span>}
                       </td>
                       <td>
                         <span style={{ 

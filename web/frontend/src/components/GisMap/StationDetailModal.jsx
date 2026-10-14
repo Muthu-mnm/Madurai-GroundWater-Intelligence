@@ -46,29 +46,33 @@ export default function StationDetailModal({
   const ph = Number(matchedRecord.pH);
   const no3 = Number(matchedRecord.NO3);
   const cl = Number(matchedRecord.Cl);
+  const ca = Number(matchedRecord.Ca);
+  const mg = Number(matchedRecord.Mg);
   const sar = Number(matchedRecord.SAR);
   const rsc = Number(matchedRecord.RSC);
   const naPct = Number(matchedRecord['Na%']);
 
   const hasNo3 = !isNaN(no3) && no3 !== null;
   const hasCl = !isNaN(cl) && cl !== null;
+  const hasCa = !isNaN(ca) && ca !== null;
+  const hasMg = !isNaN(mg) && mg !== null;
   const hasSar = !isNaN(sar) && sar !== null;
   const hasRsc = !isNaN(rsc) && rsc !== null;
   const hasNaPct = !isNaN(naPct) && naPct !== null;
 
-  // 1. Water Quality Domain Assessment (Top Metrics: pH, EC, TDS, Fluoride, NO3, Cl)
+  // 1. Water Quality Domain Assessment (Top Metrics: pH, EC, TDS, Fluoride, NO3, Cl, Ca, Mg)
   let wqClass = 'Low Vulnerability';
   let wqReason = 'All parameter point estimates and prediction bounds strictly comply with desirable limits.';
   if (isNaN(tds) || isNaN(ec) || isNaN(f) || isNaN(ph)) {
     wqClass = 'Insufficient Data';
     wqReason = 'Missing core water quality parameters.';
-  } else if (f > 3.0 || tds > 3000 || ec > 4000 || (hasCl && cl > 1500) || (hasNo3 && no3 > 100) || ph < 5.0 || ph > 9.5) {
+  } else if (f > 3.0 || tds > 3000 || ec > 4000 || (hasCl && cl > 1500) || (hasNo3 && no3 > 100) || (hasCa && ca > 300) || (hasMg && mg > 150) || ph < 5.0 || ph > 9.5) {
     wqClass = 'Very High Vulnerability';
     wqReason = f > 3.0 ? `Severe Fluoride (${f.toFixed(2)} mg/L > 3.0)` : (tds > 3000 ? `Severe Mineralization (${tds.toFixed(0)} mg/L)` : `Extreme Contaminant Load`);
-  } else if (f > 1.5 || tds > 2000 || ec > 2250 || (hasCl && cl > 1000) || (hasNo3 && no3 > 45) || ph < 6.5 || ph > 8.5) {
+  } else if (f > 1.5 || tds > 2000 || ec > 2250 || (hasCl && cl > 1000) || (hasNo3 && no3 > 45) || (hasCa && ca > 200) || (hasMg && mg > 100) || ph < 6.5 || ph > 8.5) {
     wqClass = 'High Vulnerability';
-    wqReason = f > 1.5 ? `Fluoride Exceedance (${f.toFixed(2)} mg/L > 1.5 BIS Limit)` : (tds > 2000 ? `TDS Exceedance (${tds.toFixed(0)} mg/L)` : (hasCl && cl > 1000 ? `Chloride Exceedance (${cl.toFixed(0)} mg/L)` : `EC/pH Non-compliance`));
-  } else if (tds > 500 || f > 1.0 || ec > 750 || (hasCl && cl > 250) || (matchedRecord.Fluoride_Upper_CI && Number(matchedRecord.Fluoride_Upper_CI) > 1.5)) {
+    wqReason = f > 1.5 ? `Fluoride Exceedance (${f.toFixed(2)} mg/L > 1.5 BIS Limit)` : (tds > 2000 ? `TDS Exceedance (${tds.toFixed(0)} mg/L)` : (hasCl && cl > 1000 ? `Chloride Exceedance (${cl.toFixed(0)} mg/L)` : (hasCa && ca > 200 ? `Calcium Exceedance (${ca.toFixed(1)} mg/L)` : `EC/pH/Hardness Non-compliance`)));
+  } else if (tds > 500 || f > 1.0 || ec > 750 || (hasCl && cl > 250) || (hasCa && ca > 75) || (hasMg && mg > 30) || (matchedRecord.Fluoride_Upper_CI && Number(matchedRecord.Fluoride_Upper_CI) > 1.5)) {
     wqClass = 'Moderate Vulnerability';
     wqReason = 'Permissible relaxation zone or prediction uncertainty bound crosses statutory threshold.';
   }
@@ -316,7 +320,7 @@ export default function StationDetailModal({
                 {wqReason}
               </div>
               <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                pH: {ph ? ph.toFixed(2) : '—'} | EC: {ec ? ec.toFixed(0) : '—'} | TDS: {tds ? tds.toFixed(0) : '—'} | F: {f ? f.toFixed(2) : '—'} | NO₃: {hasNo3 ? no3.toFixed(1) : '—'} | Cl: {hasCl ? cl.toFixed(0) : '—'}
+                pH: {ph ? ph.toFixed(2) : '—'} | EC: {ec ? ec.toFixed(0) : '—'} | TDS: {tds ? tds.toFixed(0) : '—'} | F: {f ? f.toFixed(2) : '—'} | NO₃: {hasNo3 ? no3.toFixed(1) : '—'} | Cl: {hasCl ? cl.toFixed(0) : '—'} | Ca: {hasCa ? ca.toFixed(1) : '—'} | Mg: {hasMg ? mg.toFixed(1) : '—'}
               </div>
             </div>
 
@@ -368,7 +372,7 @@ export default function StationDetailModal({
                 Longitudinal Hydrochemical Trend &amp; Uncertainty Bounds (2007–2030)
               </div>
               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                {['Fluoride', 'NO3', 'TDS', 'EC', 'pH', 'Cl', 'SAR', 'RSC', 'Na%'].map(param => (
+                {['Fluoride', 'NO3', 'TDS', 'EC', 'pH', 'Cl', 'Ca', 'Mg', 'SAR', 'RSC', 'Na%'].map(param => (
                   <button
                     key={param}
                     className={`btn btn-sm ${activeParam === param ? 'btn-primary' : 'btn-secondary'}`}

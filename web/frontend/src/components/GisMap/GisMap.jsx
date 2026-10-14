@@ -406,22 +406,26 @@ export default function GisMap({
     const tds = Number(st.TDS);
     const ph = Number(st.pH);
     const cl = Number(st.Cl);
+    const ca = Number(st.Ca);
+    const mg = Number(st.Mg);
     const sar = Number(st.SAR);
     const rsc = Number(st.RSC);
     const naPct = Number(st['Na%']);
     const no3 = Number(st.NO3);
 
     const hasCl = !isNaN(cl) && cl !== null;
+    const hasCa = !isNaN(ca) && ca !== null;
+    const hasMg = !isNaN(mg) && mg !== null;
     const hasNo3 = !isNaN(no3) && no3 !== null;
     const hasSar = !isNaN(sar) && sar !== null;
     const hasRsc = !isNaN(rsc) && rsc !== null;
     const hasNaPct = !isNaN(naPct) && naPct !== null;
 
-    // 1. Water Quality Domain (pH, EC, TDS, Fluoride, NO3, Cl)
+    // 1. Water Quality Domain (pH, EC, TDS, Fluoride, NO3, Cl, Ca, Mg)
     let wq = 'Low Vulnerability';
-    if (f > 3.0 || tds > 3000 || ec > 4000 || (hasCl && cl > 1500) || (hasNo3 && no3 > 100) || ph < 5.0 || ph > 9.5) wq = 'Very High Vulnerability';
-    else if (f > 1.5 || tds > 2000 || ec > 2250 || (hasCl && cl > 1000) || (hasNo3 && no3 > 45) || ph < 6.5 || ph > 8.5) wq = 'High Vulnerability';
-    else if (tds > 500 || f > 1.0 || ec > 750 || (hasCl && cl > 250) || (st.Fluoride_Upper_CI && Number(st.Fluoride_Upper_CI) > 1.5)) wq = 'Moderate Vulnerability';
+    if (f > 3.0 || tds > 3000 || ec > 4000 || (hasCl && cl > 1500) || (hasNo3 && no3 > 100) || (hasCa && ca > 300) || (hasMg && mg > 150) || ph < 5.0 || ph > 9.5) wq = 'Very High Vulnerability';
+    else if (f > 1.5 || tds > 2000 || ec > 2250 || (hasCl && cl > 1000) || (hasNo3 && no3 > 45) || (hasCa && ca > 200) || (hasMg && mg > 100) || ph < 6.5 || ph > 8.5) wq = 'High Vulnerability';
+    else if (tds > 500 || f > 1.0 || ec > 750 || (hasCl && cl > 250) || (hasCa && ca > 75) || (hasMg && mg > 30) || (st.Fluoride_Upper_CI && Number(st.Fluoride_Upper_CI) > 1.5)) wq = 'Moderate Vulnerability';
 
     // 2. Agriculture Domain (EC, SAR, RSC, Na%, pH)
     let agri = 'Low Vulnerability';

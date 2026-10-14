@@ -88,6 +88,42 @@ export const THRESHOLDS = {
     extreme: 1500.0,
     step: 10.0
   },
+  Ca: {
+    name: 'Calcium (as Ca)',
+    symbol: 'Ca',
+    unit: 'mg/L',
+    desirable: 75.0,
+    permissible: 200.0,
+    extreme: 300.0,
+    step: 5.0
+  },
+  Calcium: {
+    name: 'Calcium (as Ca)',
+    symbol: 'Ca',
+    unit: 'mg/L',
+    desirable: 75.0,
+    permissible: 200.0,
+    extreme: 300.0,
+    step: 5.0
+  },
+  Mg: {
+    name: 'Magnesium (as Mg)',
+    symbol: 'Mg',
+    unit: 'mg/L',
+    desirable: 30.0,
+    permissible: 100.0,
+    extreme: 150.0,
+    step: 2.0
+  },
+  Magnesium: {
+    name: 'Magnesium (as Mg)',
+    symbol: 'Mg',
+    unit: 'mg/L',
+    desirable: 30.0,
+    permissible: 100.0,
+    extreme: 150.0,
+    step: 2.0
+  },
   SAR: {
     name: 'Sodium Adsorption Ratio',
     symbol: 'SAR',
@@ -254,7 +290,7 @@ export const DOMAIN_METADATA = {
     name: 'Combined Assessment',
     title: 'Combined Groundwater Vulnerability',
     shortTitle: 'Combined Assessment',
-    topMetrics: ['EC', 'SAR', 'RSC', 'Na%', 'Fluoride', 'NO3', 'TDS', 'pH', 'Cl'],
+    topMetrics: ['EC', 'SAR', 'RSC', 'Na%', 'Fluoride', 'NO3', 'TDS', 'pH', 'Cl', 'Ca', 'Mg'],
     purpose: 'Protective composite screening across Agriculture, Human Health, and Water Quality',
     standards: 'Protective Precedence Engine (v2.1.0)',
     standard: 'Protective composite rule engine (WQ + Health + Agri)',
@@ -266,12 +302,12 @@ export const DOMAIN_METADATA = {
     name: 'Water Quality Monitoring',
     title: 'Water Quality Vulnerability',
     shortTitle: 'Water Quality',
-    topMetrics: ['pH', 'EC', 'TDS', 'Fluoride', 'NO3', 'Cl'],
+    topMetrics: ['pH', 'EC', 'TDS', 'Fluoride', 'NO3', 'Cl', 'Ca', 'Mg'],
     purpose: 'Identify poor-quality water and monitor changes over time',
     standards: 'BIS 10500:2012 & CPCB',
-    standard: 'BIS 10500:2012 & CPCB (pH, EC, TDS, Fluoride, NO3, Cl)',
+    standard: 'BIS 10500:2012 & CPCB (pH, EC, TDS, Fluoride, NO3, Cl, Ca, Mg)',
     modelType: 'Adaptive Ensemble Forecaster + BIS 10500:2012 Regulatory Screening',
-    description: 'Screens pH, EC, TDS, Fluoride, Nitrate, and Chloride point forecasts and nominal 80% Bayesian uncertainty intervals.'
+    description: 'Screens pH, EC, TDS, Fluoride, Nitrate, Chloride, Calcium, and Magnesium point forecasts and nominal 80% Bayesian uncertainty intervals.'
   },
   agriculture: {
     id: 'agriculture',

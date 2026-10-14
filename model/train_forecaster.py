@@ -3,7 +3,7 @@ Train and Serialize Multi-Domain Adaptive Ensemble Forecaster (2007-2030)
 Trains on all top metrics requested for:
 1. Agriculture: EC, SAR, RSC, Na%, pH
 2. Human Health: Fluoride, NO3, TDS, pH, Cl
-3. Water Quality Monitoring: pH, EC, TDS, Fluoride, NO3, Cl
+3. Water Quality Monitoring: pH, EC, TDS, Fluoride, NO3, Cl, Ca, Mg
 """
 
 import json
@@ -27,8 +27,8 @@ def train_and_export():
     
     df = pd.DataFrame(hist_data)
     
-    # 9 Core metrics across Agriculture, Human Health, and Water Quality
-    key_cols = ['TDS', 'EC', 'pH', 'Fluoride', 'NO3', 'Cl', 'SAR', 'RSC', 'Na%']
+    # 11 Core metrics across Agriculture, Human Health, and Water Quality (including Ca & Mg)
+    key_cols = ['TDS', 'EC', 'pH', 'Fluoride', 'NO3', 'Cl', 'Ca', 'Mg', 'SAR', 'RSC', 'Na%']
     print(f"Training on top metrics ({len(key_cols)}): {key_cols}")
     
     # Aggregate annual village observations
@@ -131,7 +131,7 @@ def train_and_export():
         meta['top_metrics'] = {
             'agriculture': ['EC', 'SAR', 'RSC', 'Na%', 'pH'],
             'human_health': ['Fluoride', 'NO3', 'TDS', 'pH', 'Cl'],
-            'water_quality_monitoring': ['pH', 'EC', 'TDS', 'Fluoride', 'NO3', 'Cl']
+            'water_quality_monitoring': ['pH', 'EC', 'TDS', 'Fluoride', 'NO3', 'Cl', 'Ca', 'Mg']
         }
         with open(meta_path, "w", encoding="utf-8") as f:
             json.dump(meta, f, indent=2)

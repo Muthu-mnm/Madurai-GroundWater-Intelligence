@@ -83,7 +83,7 @@ def get_models_status():
                 "model_type": "Adaptive Ensemble Forecaster + BIS 10500:2012 Regulatory Screening",
                 "status": "Operational & Validated",
                 "training_data": "Tamil Nadu GWWD historical records (2007-2021, 2,059 observations)",
-                "top_metrics": ["pH", "EC", "TDS", "Fluoride", "NO3", "Cl"],
+                "top_metrics": ["pH", "EC", "TDS", "Fluoride", "NO3", "Cl", "Ca", "Mg"],
                 "purpose": "Identify poor-quality water and monitor changes over time",
                 "uncertainty_method": "Empirical Bayes finite-sample residual quantiles (Nominal 80% CI)",
                 "standards": ["BIS 10500:2012 Drinking Water Specification", "CPCB Guidelines"],
@@ -202,6 +202,9 @@ class AssessmentPayload(BaseModel):
     fluoride: Optional[float] = Field(None, ge=0.0, le=20.0, description="Fluoride in mg/L")
     ph: Optional[float] = Field(None, ge=0.0, le=14.0, description="pH (0-14)")
     no3: Optional[float] = Field(None, ge=0.0, le=1000.0, description="Nitrate as NO3 in mg/L")
+    cl: Optional[float] = Field(None, ge=0.0, le=5000.0, description="Chloride in mg/L")
+    ca: Optional[float] = Field(None, ge=0.0, le=2000.0, description="Calcium in mg/L")
+    mg: Optional[float] = Field(None, ge=0.0, le=2000.0, description="Magnesium in mg/L")
     sar: Optional[float] = Field(None, ge=0.0, le=100.0, description="Sodium Adsorption Ratio")
     rsc: Optional[float] = Field(None, ge=-20.0, le=50.0, description="Residual Sodium Carbonate in meq/L")
     na_pct: Optional[float] = Field(None, ge=0.0, le=100.0, description="Sodium Percentage (%)")
@@ -227,6 +230,9 @@ def _payload_to_record(p: AssessmentPayload) -> Dict[str, Any]:
     if p.fluoride is not None: rec['Fluoride'] = p.fluoride
     if p.ph is not None: rec['pH'] = p.ph
     if p.no3 is not None: rec['NO3'] = p.no3
+    if p.cl is not None: rec['Cl'] = p.cl
+    if p.ca is not None: rec['Ca'] = p.ca
+    if p.mg is not None: rec['Mg'] = p.mg
     if p.sar is not None: rec['SAR'] = p.sar
     if p.rsc is not None: rec['RSC'] = p.rsc
     if p.na_pct is not None: rec['Na%'] = p.na_pct
@@ -255,6 +261,10 @@ def assess_water_quality_get(
     ec: Optional[float] = Query(None),
     fluoride: Optional[float] = Query(None),
     ph: Optional[float] = Query(None),
+    no3: Optional[float] = Query(None),
+    cl: Optional[float] = Query(None),
+    ca: Optional[float] = Query(None),
+    mg: Optional[float] = Query(None),
     tds_upper_ci: Optional[float] = Query(None),
     ec_upper_ci: Optional[float] = Query(None),
     fluoride_upper_ci: Optional[float] = Query(None),
@@ -263,6 +273,7 @@ def assess_water_quality_get(
 ):
     rec = {
         'TDS': tds, 'EC': ec, 'Fluoride': fluoride, 'pH': ph,
+        'NO3': no3, 'Cl': cl, 'Ca': ca, 'Mg': mg,
         'TDS_Upper_CI': tds_upper_ci, 'EC_Upper_CI': ec_upper_ci,
         'Fluoride_Upper_CI': fluoride_upper_ci,
         'pH_Lower_CI': ph_lower_ci, 'pH_Upper_CI': ph_upper_ci

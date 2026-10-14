@@ -81,7 +81,7 @@ export default function Methodology() {
                   <Droplet size={14} /> Water Quality Monitoring
                 </strong>
                 <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                  <strong>Top Metrics:</strong> pH, EC, TDS, Fluoride, NO₃, Cl<br />
+                  <strong>Top Metrics:</strong> pH, EC, TDS, Fluoride, NO₃, Cl, Ca, Mg<br />
                   <strong>Purpose:</strong> Identify poor-quality water and monitor changes over time
                 </div>
                 <div style={{ fontSize: '0.78rem', marginTop: '4px' }}>

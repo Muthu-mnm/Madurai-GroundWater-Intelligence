@@ -25,7 +25,7 @@ class AdaptiveEnsembleForecaster:
         (pH is strictly bounded within the [0, 14] Sorensen scale).
     """
     def __init__(self, key_cols=None, phi=0.70, origin_year=2021):
-        self.key_cols = key_cols or ['TDS', 'EC', 'pH', 'Fluoride', 'NO3', 'Cl', 'SAR', 'RSC', 'Na%']
+        self.key_cols = key_cols or ['TDS', 'EC', 'pH', 'Fluoride', 'NO3', 'Cl', 'Ca', 'Mg', 'SAR', 'RSC', 'Na%']
         self.phi = phi
         self.origin_year = origin_year
         self.is_fitted = False
@@ -41,6 +41,8 @@ class AdaptiveEnsembleForecaster:
             'pH': 1.631,
             'NO3': 1.310,
             'Cl': 1.285,
+            'Ca': 1.280,
+            'Mg': 1.295,
             'SAR': 1.290,
             'RSC': 1.305,
             'Na%': 1.260
@@ -221,6 +223,10 @@ class AdaptiveEnsembleForecaster:
         no3_up = row.get('NO3_Upper_CI', no3)
         cl = row.get('Cl')
         cl_up = row.get('Cl_Upper_CI', cl)
+        ca = row.get('Ca')
+        ca_up = row.get('Ca_Upper_CI', ca)
+        mg = row.get('Mg')
+        mg_up = row.get('Mg_Upper_CI', mg)
         sar = row.get('SAR')
         sar_up = row.get('SAR_Upper_CI', sar)
         rsc = row.get('RSC')
@@ -236,6 +242,8 @@ class AdaptiveEnsembleForecaster:
         if ec > 2250.0: confirmed.append(f"EC High ({ec:.1f} µS/cm > 2250 CPCB Salinity Guide)")
         if no3 is not None and no3 > 45.0: confirmed.append(f"Nitrate High ({no3:.1f} mg/L > 45 BIS Limit - Methemoglobinemia Hazard)")
         if cl is not None and cl > 1000.0: confirmed.append(f"Chloride High ({cl:.1f} mg/L > 1000 BIS Limit - Salty/GI Hazard)")
+        if ca is not None and ca > 200.0: confirmed.append(f"Calcium High ({ca:.1f} mg/L > 200 BIS Limit - High Hardness)")
+        if mg is not None and mg > 100.0: confirmed.append(f"Magnesium High ({mg:.1f} mg/L > 100 BIS Limit - Encrustation/Laxative)")
         if sar is not None and sar > 18.0: confirmed.append(f"SAR High ({sar:.1f} > 18 - Severe Sodicity Hazard)")
         if rsc is not None and rsc > 2.5: confirmed.append(f"RSC High ({rsc:.2f} meq/L > 2.5 - Hazardous Alkalinity)")
         if na_pct is not None and na_pct > 60.0: confirmed.append(f"Na% High ({na_pct:.1f}% > 60% - High Sodium Hazard)")
@@ -256,6 +264,8 @@ class AdaptiveEnsembleForecaster:
         if ec_up > 2250.0: borderline.append(f"Permissible EC ({ec:.1f} µS/cm), but Upper CI ({ec_up:.1f} µS/cm) crosses 2250 CPCB guide")
         if no3_up is not None and no3_up > 45.0: borderline.append(f"Permissible NO3 ({no3:.1f} mg/L), but Upper CI ({no3_up:.1f} mg/L) crosses 45 limit")
         if cl_up is not None and cl_up > 1000.0: borderline.append(f"Permissible Cl ({cl:.1f} mg/L), but Upper CI ({cl_up:.1f} mg/L) crosses 1000 limit")
+        if ca_up is not None and ca_up > 200.0: borderline.append(f"Permissible Calcium ({ca:.1f} mg/L), but Upper CI ({ca_up:.1f} mg/L) crosses 200 limit")
+        if mg_up is not None and mg_up > 100.0: borderline.append(f"Permissible Magnesium ({mg:.1f} mg/L), but Upper CI ({mg_up:.1f} mg/L) crosses 100 limit")
         if sar_up is not None and sar_up > 18.0: borderline.append(f"Permissible SAR ({sar:.1f}), but Upper CI ({sar_up:.1f}) crosses 18 sodicity guide")
         if rsc_up is not None and rsc_up > 2.5: borderline.append(f"Permissible RSC ({rsc:.2f}), but Upper CI ({rsc_up:.2f}) crosses 2.5 guide")
         if na_pct_up is not None and na_pct_up > 60.0: borderline.append(f"Permissible Na% ({na_pct:.1f}%), but Upper CI ({na_pct_up:.1f}%) crosses 60% guide")
@@ -275,6 +285,8 @@ class AdaptiveEnsembleForecaster:
             ph >= 6.5 and ph_low >= 6.5 and ph <= 8.5 and ph_up <= 8.5 and
             (no3 is None or (no3 <= 45.0 and no3_up <= 45.0)) and
             (cl is None or (cl <= 250.0 and cl_up <= 250.0)) and
+            (ca is None or (ca <= 75.0 and ca_up <= 75.0)) and
+            (mg is None or (mg <= 30.0 and mg_up <= 30.0)) and
             (sar is None or (sar <= 10.0 and sar_up <= 10.0)) and
             (rsc is None or (rsc <= 1.25 and rsc_up <= 1.25)) and
             (na_pct is None or (na_pct <= 40.0 and na_pct_up <= 40.0))
@@ -292,6 +304,8 @@ class AdaptiveEnsembleForecaster:
         if f > 1.0 or f_up > 1.0: perm.append(f"Fluoride in Permissible Range (Point: {f:.2f}, Upper CI: {f_up:.2f} mg/L)")
         if ec > 750.0 or ec_up > 750.0: perm.append(f"EC in Permissible Range (Point: {ec:.1f}, Upper CI: {ec_up:.1f} µS/cm)")
         if cl is not None and (cl > 250.0 or (cl_up is not None and cl_up > 250.0)): perm.append(f"Chloride in Permissible Range (Point: {cl:.1f}, Upper CI: {cl_up:.1f} mg/L)")
+        if ca is not None and (ca > 75.0 or (ca_up is not None and ca_up > 75.0)): perm.append(f"Calcium in Permissible Range (Point: {ca:.1f}, Upper CI: {ca_up:.1f} mg/L)")
+        if mg is not None and (mg > 30.0 or (mg_up is not None and mg_up > 30.0)): perm.append(f"Magnesium in Permissible Range (Point: {mg:.1f}, Upper CI: {mg_up:.1f} mg/L)")
         return {
             'Water_Quality_Status': 'Permissible Quality (In Absence of Alternate Source)',
             'Risk_Level': 'Medium Risk (Permissible)',

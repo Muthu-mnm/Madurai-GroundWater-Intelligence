@@ -45,29 +45,33 @@ export default function CombinedRiskView({
     const ec = Number(record.EC);
     const ph = Number(record.pH);
     const cl = Number(record.Cl);
+    const ca = Number(record.Ca);
+    const mg = Number(record.Mg);
     const sar = Number(record.SAR);
     const rsc = Number(record.RSC);
     const naPct = Number(record['Na%']);
 
     const hasNo3 = !isNaN(no3) && no3 !== null;
     const hasCl = !isNaN(cl) && cl !== null;
+    const hasCa = !isNaN(ca) && ca !== null;
+    const hasMg = !isNaN(mg) && mg !== null;
     const hasSar = !isNaN(sar) && sar !== null;
     const hasRsc = !isNaN(rsc) && rsc !== null;
     const hasNaPct = !isNaN(naPct) && naPct !== null;
 
-    // 1. Water Quality Domain (Top Metrics: pH, EC, TDS, Fluoride, NO3, Cl)
+    // 1. Water Quality Domain (Top Metrics: pH, EC, TDS, Fluoride, NO3, Cl, Ca, Mg)
     let wqClass = 'Low Vulnerability';
     let wqReason = 'Within desirable limits';
     if (isNaN(tds) || isNaN(ec) || isNaN(f) || isNaN(ph)) {
       wqClass = 'Insufficient Data';
       wqReason = 'Missing parameters';
-    } else if (f > 3.0 || tds > 3000 || ec > 4000 || (hasCl && cl > 1500) || (hasNo3 && no3 > 100) || ph < 5.0 || ph > 9.5) {
+    } else if (f > 3.0 || tds > 3000 || ec > 4000 || (hasCl && cl > 1500) || (hasNo3 && no3 > 100) || (hasCa && ca > 300) || (hasMg && mg > 150) || ph < 5.0 || ph > 9.5) {
       wqClass = 'Very High Vulnerability';
       wqReason = f > 3.0 ? `Severe Fluoride (${f.toFixed(2)} mg/L)` : (tds > 3000 ? `Severe Mineralization (${tds.toFixed(0)} mg/L)` : `Extreme Contaminant Load`);
-    } else if (f > 1.5 || tds > 2000 || ec > 2250 || (hasCl && cl > 1000) || (hasNo3 && no3 > 45) || ph < 6.5 || ph > 8.5) {
+    } else if (f > 1.5 || tds > 2000 || ec > 2250 || (hasCl && cl > 1000) || (hasNo3 && no3 > 45) || (hasCa && ca > 200) || (hasMg && mg > 100) || ph < 6.5 || ph > 8.5) {
       wqClass = 'High Vulnerability';
-      wqReason = f > 1.5 ? `Fluoride Exceedance (${f.toFixed(2)} mg/L > 1.5)` : (tds > 2000 ? `TDS Exceedance (${tds.toFixed(0)} mg/L)` : (hasCl && cl > 1000 ? `Chloride Exceedance (${cl.toFixed(0)} mg/L)` : `EC/pH Non-compliance`));
-    } else if (tds > 500 || f > 1.0 || ec > 750 || (hasCl && cl > 250) || (record.Fluoride_Upper_CI && Number(record.Fluoride_Upper_CI) > 1.5)) {
+      wqReason = f > 1.5 ? `Fluoride Exceedance (${f.toFixed(2)} mg/L > 1.5)` : (tds > 2000 ? `TDS Exceedance (${tds.toFixed(0)} mg/L)` : (hasCl && cl > 1000 ? `Chloride Exceedance (${cl.toFixed(0)} mg/L)` : (hasCa && ca > 200 ? `Calcium Exceedance (${ca.toFixed(1)} mg/L)` : `EC/pH/Hardness Non-compliance`)));
+    } else if (tds > 500 || f > 1.0 || ec > 750 || (hasCl && cl > 250) || (hasCa && ca > 75) || (hasMg && mg > 30) || (record.Fluoride_Upper_CI && Number(record.Fluoride_Upper_CI) > 1.5)) {
       wqClass = 'Moderate Vulnerability';
       wqReason = 'Permissible relaxation / CI breach';
     }
