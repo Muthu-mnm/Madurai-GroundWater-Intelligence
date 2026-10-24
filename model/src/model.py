@@ -1,29 +1,33 @@
+"""
+Adaptive Ensemble Groundwater Quality Forecaster
+Refactored for Well-Level Identity (166 Monitoring Wells) & Multi-Domain Risk Assessment
+
+Primary Key: Well_No + Year
+Architecture:
+  y_hat_ens = 0.5 * y_hat_damped + 0.5 * y_bar
+  
+  Where:
+    - y_bar: Historical baseline well mean
+    - y_hat_damped: Non-linear damped trend reverting toward historical mean
+      y_hat_damped = (1 - w) * (y_last + damped_slope) + w * y_bar
+      damped_slope = (slope * shrinkage) * sum_{i=1}^h phi^i  (phi=0.70)
+      shrinkage = t_stat^2 / (t_stat^2 + 2.0)  [Empirical Bayes regularization]
+      w = min(1.0, 0.15 * h)
+      h = Year - Origin_Cutoff
+      
+  Uncertainty Intervals:
+    sigma_h = s_pooled * sqrt(1 + 0.15 * (h - 1))
+    Interval = [max(0, y_hat - q_80 * sigma_h), y_hat + q_80 * sigma_h]
+    (pH is strictly bounded within the [0, 14] Sorensen scale; Na% within [0, 100]).
+"""
+
 import numpy as np
 import pandas as pd
 import joblib
 from pathlib import Path
+from typing import Optional, Dict, Any, List, Union
 
 class AdaptiveEnsembleForecaster:
-    """
-    Adaptive Ensemble Groundwater Quality Forecaster
-    
-    Architecture:
-      y_hat_ens = 0.5 * y_hat_damped + 0.5 * y_bar
-      
-      Where:
-        - y_bar: Historical baseline station mean
-        - y_hat_damped: Non-linear damped trend reverting toward historical mean
-          y_hat_damped = (1 - w) * (y_last + damped_slope) + w * y_bar
-          damped_slope = (slope * shrinkage) * sum_{i=1}^h phi^i  (phi=0.70)
-          shrinkage = t_stat^2 / (t_stat^2 + 2.0)  [Empirical Bayes regularization]
-          w = min(1.0, 0.15 * h)
-          h = Year - Origin_Cutoff
-          
-      Uncertainty Intervals:
-        sigma_h = s_pooled * sqrt(1 + 0.15 * (h - 1))
-        Interval = [max(0, y_hat - q_80 * sigma_h), y_hat + q_80 * sigma_h]
-        (pH is strictly bounded within the [0, 14] Sorensen scale).
-    """
     def __init__(self, key_cols=None, phi=0.70, origin_year=2021):
         self.key_cols = key_cols or ['TDS', 'EC', 'pH', 'Fluoride', 'NO3', 'Cl', 'Ca', 'Mg', 'SAR', 'RSC', 'Na%']
         self.phi = phi
@@ -31,29 +35,32 @@ class AdaptiveEnsembleForecaster:
         self.is_fitted = False
         
         # Fitted parameters
-        self.stations_ = {}
+        self.stations_ = {}          # Key: Well_No (clean string)
+        self.village_map_ = {}       # Key: (taluk.lower(), village.lower()) -> list of Well_No
+        self.stations_by_loc_ = {}   # Key: (taluk.lower(), village.lower()) -> station_params (only if unambiguous)
         self.taluk_priors_ = {}
         self.district_priors_ = {}
         self.calibrated_q80_ = {
-            'TDS': 1.259,
-            'EC': 1.223,
-            'Fluoride': 1.364,
-            'pH': 1.631,
-            'NO3': 1.310,
-            'Cl': 1.285,
-            'Ca': 1.280,
-            'Mg': 1.295,
-            'SAR': 1.290,
-            'RSC': 1.305,
-            'Na%': 1.260
+            'TDS': 1.366,
+            'EC': 1.555,
+            'Fluoride': 1.407,
+            'pH': 1.280,
+            'NO3': 1.280,
+            'Cl': 1.193,
+            'Ca': 1.142,
+            'Mg': 1.220,
+            'SAR': 1.646,
+            'RSC': 1.250,
+            'Na%': 1.251
         }
         
-    def fit(self, df_annual):
+    def fit(self, df_annual: pd.DataFrame):
         """
-        Fit station-level parameters and regional empirical Bayes priors.
-        Expects aggregated annual dataframe with columns: ['Taluk', 'Village', 'Year', ...]
+        Fit well-level parameters and regional empirical Bayes priors.
+        Expects annual dataframe with columns: ['Well_No', 'Year', 'Taluk', 'Village', ...]
         """
         tr_df = df_annual[df_annual['Year'] <= self.origin_year].copy()
+        tr_df['Well_No'] = tr_df['Well_No'].astype(str).str.strip()
         
         # 1. Regional Priors per parameter
         for param in self.key_cols:
@@ -61,17 +68,27 @@ class AdaptiveEnsembleForecaster:
                 self.taluk_priors_[param] = tr_df.groupby('Taluk')[param].std().to_dict()
                 self.district_priors_[param] = float(tr_df[param].std())
             
-        # 2. Station-level parameters
+        # 2. Well-level parameters (Primary Key: Well_No)
         self.stations_ = {}
-        for (taluk, village), grp in tr_df.groupby(['Taluk', 'Village']):
+        self.village_map_ = {}
+        self.stations_by_loc_ = {}
+        
+        for wno, grp in tr_df.groupby('Well_No'):
             grp = grp.sort_values('Year')
             n_years = len(grp)
             last_yr = int(grp['Year'].iloc[-1])
+            taluk = grp['Taluk'].iloc[-1] if 'Taluk' in grp.columns else 'Unknown'
+            village = grp['Village'].iloc[-1] if 'Village' in grp.columns else 'Unknown'
+            lat = float(grp['Latitude'].iloc[-1]) if 'Latitude' in grp.columns and pd.notnull(grp['Latitude'].iloc[-1]) else None
+            lon = float(grp['Longitude'].iloc[-1]) if 'Longitude' in grp.columns and pd.notnull(grp['Longitude'].iloc[-1]) else None
             sample_cnt = int(grp['Sample_Count'].iloc[-1]) if 'Sample_Count' in grp.columns else 1
             
-            station_params = {
+            well_params = {
+                'Well_No': wno,
                 'Taluk': taluk,
                 'Village': village,
+                'Latitude': lat,
+                'Longitude': lon,
                 'n_years': n_years,
                 'last_year': last_yr,
                 'sample_count': sample_cnt,
@@ -106,7 +123,7 @@ class AdaptiveEnsembleForecaster:
                     s_pooled = s_prior
                     shrinkage = 0.0
                     
-                station_params['params'][param] = {
+                well_params['params'][param] = {
                     'hist_mean': hist_mean,
                     'last_val': last_val,
                     'slope': slope,
@@ -114,42 +131,96 @@ class AdaptiveEnsembleForecaster:
                     's_pooled': s_pooled
                 }
                 
-            self.stations_[(taluk.lower(), village.lower())] = station_params
+            self.stations_[wno] = well_params
+            
+            # Populate village mapping
+            v_key = (taluk.lower().strip(), village.lower().strip())
+            if v_key not in self.village_map_:
+                self.village_map_[v_key] = []
+            self.village_map_[v_key].append(wno)
+            
+        # Build unambiguous location map
+        for v_key, w_list in self.village_map_.items():
+            if len(w_list) == 1:
+                self.stations_by_loc_[v_key] = self.stations_[w_list[0]]
             
         self.is_fitted = True
         return self
 
-    def set_calibration_quantiles(self, q_dict):
+    def set_calibration_quantiles(self, q_dict: Dict[str, float]):
         """Set empirically calibrated finite-sample quantiles."""
         self.calibrated_q80_.update(q_dict)
 
-    def predict_station(self, taluk, village, year):
+    def resolve_well(self, well_no: Optional[str] = None, taluk: Optional[str] = None, village: Optional[str] = None):
         """
-        Generate point forecast and uncertainty intervals for a specific station and year.
+        Disambiguates and retrieves station metadata without silent merging or erroneous village fallback.
+        """
+        if well_no:
+            wno_clean = str(well_no).strip()
+            if wno_clean in self.stations_:
+                return self.stations_[wno_clean]
+            # Try case-insensitive well lookup
+            for k, v in self.stations_.items():
+                if k.lower() == wno_clean.lower():
+                    return v
+            raise KeyError(f"Monitoring Well '{well_no}' not found in trained well catalog.")
+            
+        if village:
+            v_clean = village.strip().lower()
+            t_clean = taluk.strip().lower() if taluk else None
+            
+            matching_keys = [k for k in self.village_map_ if k[1] == v_clean and (t_clean is None or k[0] == t_clean)]
+            if not matching_keys:
+                raise KeyError(f"No monitoring well found for Village '{village}' ({taluk or 'any taluk'}).")
+                
+            matching_wells = []
+            for k in matching_keys:
+                matching_wells.extend(self.village_map_[k])
+                
+            if len(matching_wells) == 1:
+                return self.stations_[matching_wells[0]]
+            else:
+                raise ValueError(
+                    f"Ambiguous station request: Village '{village}' contains {len(matching_wells)} distinct "
+                    f"monitoring wells ({matching_wells}). Please specify 'well_no' explicitly."
+                )
+                
+        raise ValueError("Must provide either 'well_no' or 'village' to locate station.")
+
+    def predict_station(
+        self,
+        taluk: Optional[str] = None,
+        village: Optional[str] = None,
+        year: int = 2026,
+        well_no: Optional[str] = None,
+        method: str = 'ensemble'
+    ) -> Dict[str, Any]:
+        """
+        Generate point forecast, uncertainty bounds, and 4-domain vulnerability assessments
+        for a specific monitoring well and year.
         """
         if not self.is_fitted:
             raise RuntimeError("Model must be fitted before calling predict.")
             
-        key = (taluk.lower(), village.lower())
-        if key not in self.stations_:
-            matches = [k for k in self.stations_ if k[1] == village.lower()]
-            if matches:
-                key = matches[0]
-            else:
-                raise KeyError(f"Station '{village}' ({taluk}) not found in trained stations.")
-                
-        st = self.stations_[key]
+        st = self.resolve_well(well_no=well_no, taluk=taluk, village=village)
         h = max(1, year - self.origin_year)
         elapsed = year - st['last_year']
         
         results = {
+            'Well_No': st['Well_No'],
             'Taluk': st['Taluk'],
             'Village': st['Village'],
+            'Latitude': st.get('Latitude'),
+            'Longitude': st.get('Longitude'),
             'Year': year,
             'Horizon': h,
             'Elapsed_Years': elapsed,
             'Historical_Observations': st['n_years'],
-            'Last_Observed_Year': st['last_year']
+            'Last_Observed_Year': st['last_year'],
+            'Model_Selected': f"Adaptive Ensemble ({method.title()})" if method != 'ensemble' else 'Adaptive Ensemble',
+            'Calibration_Method': 'Empirical Bayes Residual Scaling',
+            'Nominal_Interval_Coverage': 'Nominal 80%',
+            'Projection_Type': 'Unverified Retrospective Projection' if year <= 2025 else 'Prospective Forecast'
         }
         
         for param in self.key_cols:
@@ -163,11 +234,23 @@ class AdaptiveEnsembleForecaster:
             s_pooled = p_info['s_pooled']
             q_val = self.calibrated_q80_.get(param, 1.28)
             
-            damped_slope = (slope * shrinkage) * sum([self.phi**i for i in range(1, int(h)+1)])
-            w = min(1.0, 0.15 * h)
-            damp_val = (1.0 - w) * (last_val + damped_slope) + w * hist_mean
-            p_val = 0.5 * damp_val + 0.5 * hist_mean
+            # Model options
+            if method == 'mean':
+                p_val = hist_mean
+            elif method == 'persistence':
+                p_val = last_val
+            elif method == 'linear':
+                p_val = hist_mean + slope * h
+            elif method == 'damped':
+                damped_slope = slope * sum([self.phi**i for i in range(1, int(h)+1)])
+                p_val = last_val + damped_slope
+            else: # Adaptive Ensemble default
+                damped_slope = (slope * shrinkage) * sum([self.phi**i for i in range(1, int(h)+1)])
+                w = min(1.0, 0.15 * h)
+                damp_val = (1.0 - w) * (last_val + damped_slope) + w * hist_mean
+                p_val = 0.5 * damp_val + 0.5 * hist_mean
             
+            # Physical bounds clipping
             if param == 'pH':
                 p_val = np.clip(p_val, 0.0, 14.0)
             elif param == 'Na%':
@@ -195,17 +278,17 @@ class AdaptiveEnsembleForecaster:
         results.update(risk_info)
         return results
 
-    def predict_all(self, years=range(2022, 2031)):
-        """Generate forecasts across all trained stations for specified years."""
+    def predict_all(self, years=range(2022, 2031), method: str = 'ensemble') -> pd.DataFrame:
+        """Generate forecasts across all trained monitoring wells for specified years."""
         records = []
-        for (taluk, village), st in self.stations_.items():
+        for wno in sorted(self.stations_.keys()):
             for yr in years:
-                pred = self.predict_station(st['Taluk'], st['Village'], yr)
+                pred = self.predict_station(well_no=wno, year=yr, method=method)
                 records.append(pred)
         return pd.DataFrame(records)
 
     @staticmethod
-    def assess_risk(row):
+    def assess_risk(row: Dict[str, Any]) -> Dict[str, Any]:
         """
         Evaluate regulatory compliance under BIS 10500:2012, WHO Guidelines,
         and FAO 29 / IS 11624 irrigation standards.
@@ -252,7 +335,8 @@ class AdaptiveEnsembleForecaster:
             return {
                 'Water_Quality_Status': 'Non-Compliant (Forecasted Exceedance)',
                 'Risk_Level': 'High Risk',
-                'Risk_Description': '; '.join(confirmed)
+                'Risk_Description': '; '.join(confirmed),
+                'Drinking_Suitability': 'Not Drinkable'
             }
             
         # 2. Borderline Potential Exceedance via Uncertainty Bounds (Medium Risk - Borderline)
@@ -274,7 +358,8 @@ class AdaptiveEnsembleForecaster:
             return {
                 'Water_Quality_Status': 'Conditionally Permissible (Potential Exceedance)',
                 'Risk_Level': 'Medium Risk (Borderline)',
-                'Risk_Description': '; '.join(borderline)
+                'Risk_Description': '; '.join(borderline),
+                'Drinking_Suitability': 'Required Boiling'
             }
             
         # 3. Strict Desirable Quality (Low Risk)
@@ -295,7 +380,8 @@ class AdaptiveEnsembleForecaster:
             return {
                 'Water_Quality_Status': 'Desirable Quality (Meets Selected BIS Acceptable Limits)',
                 'Risk_Level': 'Low Risk',
-                'Risk_Description': 'Point forecast and nominal 80% intervals strictly comply with desirable limits'
+                'Risk_Description': 'Point forecast and nominal 80% intervals strictly comply with desirable limits',
+                'Drinking_Suitability': 'Drinkable'
             }
             
         # 4. Standard Permissible Relaxation Zone
@@ -309,10 +395,11 @@ class AdaptiveEnsembleForecaster:
         return {
             'Water_Quality_Status': 'Permissible Quality (In Absence of Alternate Source)',
             'Risk_Level': 'Medium Risk (Permissible)',
-            'Risk_Description': '; '.join(perm) if perm else "Within permissible relaxation limits"
+            'Risk_Description': '; '.join(perm) if perm else "Within permissible relaxation limits",
+            'Drinking_Suitability': 'Required Boiling'
         }
 
-    def save(self, filepath):
+    def save(self, filepath: Union[str, Path]):
         """Serialize and save model to disk."""
         filepath = Path(filepath)
         filepath.parent.mkdir(parents=True, exist_ok=True)
@@ -320,7 +407,7 @@ class AdaptiveEnsembleForecaster:
         print(f"Model successfully saved to: {filepath}")
 
     @classmethod
-    def load(cls, filepath):
+    def load(cls, filepath: Union[str, Path]):
         """Load trained model from disk."""
         model = joblib.load(filepath)
         print(f"Model successfully loaded from: {filepath}")

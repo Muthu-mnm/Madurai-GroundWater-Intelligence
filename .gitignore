@@ -7,6 +7,7 @@ package-lock.json
 dist/
 build/
 web/frontend/dist/
+research_paper_output/
 
 # Excel and CSV Data Files (Excluded per user specification)
 *.csv

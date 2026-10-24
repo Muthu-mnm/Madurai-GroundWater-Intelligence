@@ -1,14 +1,7 @@
 {
-  "project": "Madurai Groundwater Quality Forecasting & GIS Application",
-  "dataset": "Water Quality data_ Madurai district (2007-2021).xlsx",
-  "historical_period": [
-    2007,
-    2021
-  ],
-  "forecast_period": [
-    2022,
-    2030
-  ],
+  "model_version": "2.2.0",
+  "training_origin_year": 2021,
+  "forecast_horizons": 9,
   "forecast_years": [
     2022,
     2023,
@@ -20,6 +13,8 @@
     2029,
     2030
   ],
+  "total_monitoring_wells": 166,
+  "total_forecast_records": 1494,
   "primary_targets": [
     "TDS",
     "EC",
@@ -33,53 +28,19 @@
     "RSC",
     "Na%"
   ],
-  "geographic_levels": [
-    "taluk",
-    "village"
+  "multi_domain_outputs": [
+    "Water Quality Vulnerability",
+    "Agriculture Vulnerability",
+    "Health Vulnerability",
+    "Combined Vulnerability"
   ],
-  "unique_monitoring_wells": 166,
-  "unique_villages": 154,
-  "total_taluks": 7,
-  "evaluation_metrics": [
-    "MAE",
-    "RMSE",
-    "MedAE",
-    "MaxAE",
-    "MAPE",
-    "sMAPE",
-    "WAPE",
-    "NRMSE",
-    "MeanBias",
-    "R2",
-    "ExplainedVariance"
+  "candidate_models_evaluated": [
+    "Historical Mean",
+    "Adaptive Ensemble",
+    "Damped Trend",
+    "Persistence",
+    "Linear Trend"
   ],
-  "model_selection_methodology": "Chronological expanding-window backtesting across horizons 1\u20135; Damped Trend extrapolation",
-  "uncertainty_formulation": "Compounding horizon-expanding prediction intervals: sigma_h = sqrt(sigma_0^2 + (h-1)*sigma_t^2)",
-  "status": "Validated research forecast pipeline",
-  "top_metrics": {
-    "agriculture": [
-      "EC",
-      "SAR",
-      "RSC",
-      "Na%",
-      "pH"
-    ],
-    "human_health": [
-      "Fluoride",
-      "NO3",
-      "TDS",
-      "pH",
-      "Cl"
-    ],
-    "water_quality_monitoring": [
-      "pH",
-      "EC",
-      "TDS",
-      "Fluoride",
-      "NO3",
-      "Cl",
-      "Ca",
-      "Mg"
-    ]
-  }
+  "selected_model": "Adaptive Ensemble",
+  "calibration_method": "Empirical Bayes Residual Scaling"
 }

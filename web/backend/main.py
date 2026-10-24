@@ -65,7 +65,7 @@ def get_models_status():
                 "top_metrics": ["EC", "SAR", "RSC", "Na%", "pH"],
                 "purpose": "Irrigation suitability, salinity and sodium hazards",
                 "standards": ["FAO Irrigation and Drainage Paper 29 (1985)", "Indian Standard IS 11624:1986", "USDA Handbook 60"],
-                "data_coverage": "Complete (EC, SAR, RSC, Na%, pH modeled for 154 stations across 2007–2030)",
+                "data_coverage": "Complete (EC, SAR, RSC, Na%, pH modeled for 166 monitoring wells across 2007–2030)",
                 "disclaimer": "Does not predict crop yield or economic productivity. Identifies soil permeability, alkalinity, and crop osmotic salinity hazards."
             },
             "health": {
@@ -75,7 +75,7 @@ def get_models_status():
                 "top_metrics": ["Fluoride", "NO3 (nitrate)", "TDS", "pH", "Cl (chloride)"],
                 "purpose": "Drinking-water quality screening",
                 "standards": ["WHO Guidelines for Drinking-water Quality (2017)", "BIS 10500:2012 statutory limits"],
-                "data_coverage": "Complete (Fluoride, NO3, TDS, pH, Cl modeled for 154 stations across 2007–2030)",
+                "data_coverage": "Complete (Fluoride, NO3, TDS, pH, Cl modeled for 166 monitoring wells across 2007–2030)",
                 "critical_safety_note": "Boiling water DOES NOT remove chemical contaminants such as Fluoride, Nitrate, or Chloride. Defluoridation or RO required."
             },
             "water_quality": {
@@ -87,7 +87,7 @@ def get_models_status():
                 "purpose": "Identify poor-quality water and monitor changes over time",
                 "uncertainty_method": "Empirical Bayes finite-sample residual quantiles (Nominal 80% CI)",
                 "standards": ["BIS 10500:2012 Drinking Water Specification", "CPCB Guidelines"],
-                "data_coverage": "Complete for 154 stations across 8 taluks (2007–2030)"
+                "data_coverage": "Complete for 166 monitoring wells across 7 taluks (2007–2030)"
             },
             "combined": {
                 "name": "Combined Vulnerability Assessor",
@@ -345,14 +345,15 @@ def get_assessments_summary(year: int = Query(2026)):
 
 @app.get("/api/assessments/location")
 def get_location_assessment(
-    village: str = Query(..., description="Village or station name"),
+    village: Optional[str] = Query(None, description="Village or station name"),
     taluk: Optional[str] = Query(None, description="Taluk name"),
+    well_no: Optional[str] = Query(None, description="Monitoring Well Number"),
     year: int = Query(2026, description="Assessment year (2007-2030)")
 ):
     """Fetches comprehensive multi-domain assessment and series for a specific station."""
-    res = data_service.get_station_assessment(village=village, taluk=taluk, year=year)
+    res = data_service.get_station_assessment(village=village, taluk=taluk, year=year, well_no=well_no)
     if not res:
-        raise HTTPException(status_code=404, detail=f"Station '{village}' not found in monitoring network.")
+        raise HTTPException(status_code=404, detail=f"Station '{well_no or village}' not found in monitoring network.")
     return res
 
 # =========================================================================
@@ -420,6 +421,7 @@ class PredictionRequest(BaseModel):
     ph: Optional[float] = Field(None, ge=0.0, le=14.0, description="pH (0-14 Sorensen scale)")
     taluk: Optional[str] = Field(None, description="Taluk name for regional empirical Bayes prior")
     village: Optional[str] = Field(None, description="Village / station name for baseline reference")
+    well_no: Optional[str] = Field(None, description="Monitoring Well Number (e.g. 21001D, 501003)")
     scenario: Optional[str] = Field("normal", description="Hydrological scenario: 'normal', 'recharge', 'stress', 'drought'")
 
 @app.get("/api/predict/stations")
@@ -435,6 +437,7 @@ def predict_water_quality_get(
     ph: Optional[float] = Query(None, ge=0.0, le=14.0),
     taluk: Optional[str] = Query(None),
     village: Optional[str] = Query(None),
+    well_no: Optional[str] = Query(None),
     scenario: Optional[str] = Query("normal")
 ):
     return prediction_service.predict(
@@ -445,6 +448,7 @@ def predict_water_quality_get(
         ph=ph,
         taluk=taluk,
         village=village,
+        well_no=well_no,
         scenario=scenario
     )
 
@@ -458,6 +462,7 @@ def predict_water_quality_post(req: PredictionRequest):
         ph=req.ph,
         taluk=req.taluk,
         village=req.village,
+        well_no=req.well_no,
         scenario=req.scenario
     )
 

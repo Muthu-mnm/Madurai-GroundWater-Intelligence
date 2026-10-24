@@ -295,12 +295,13 @@ class DataService:
             'taluk_breakdown': taluk_summary
         }
 
-    def get_station_assessment(self, village: str, taluk: Optional[str] = None, year: int = 2026) -> Dict[str, Any]:
+    def get_station_assessment(self, village: Optional[str] = None, taluk: Optional[str] = None, year: int = 2026, well_no: Optional[str] = None) -> Dict[str, Any]:
         """
         Retrieves station profile, historical and forecast timeseries, and executes the 4 models for the given year.
+        Supports lookup by well_no or village.
         """
         self.load_data()
-        profile = self.get_station_profile(village, taluk)
+        profile = self.get_station_profile(village=village, taluk=taluk, well_no=well_no)
         if not profile or (not profile['historical_series'] and not profile['forecast_series']):
             return None
 
@@ -348,51 +349,66 @@ class DataService:
             'forecast_series': profile['forecast_series']
         }
 
-    def get_station_profile(self, village, taluk=None):
+    def get_station_profile(self, village: Optional[str] = None, taluk: Optional[str] = None, well_no: Optional[str] = None):
         self.load_data()
-        v_norm = village.lower().strip()
         
-        # Historical profile
-        h_df = self.df_historical[self.df_historical['Village'].str.lower() == v_norm]
-        if len(h_df) == 0 and taluk:
-            h_df = self.df_historical[
-                (self.df_historical['Village'].str.lower().str.contains(v_norm)) &
-                (self.df_historical['Taluk'].str.lower() == taluk.lower())
-            ]
+        # 1. Primary lookup by Well_No
+        if well_no:
+            wno_norm = str(well_no).strip().lower()
+            h_df = self.df_historical[self.df_historical['Well_No'].astype(str).str.strip().str.lower() == wno_norm]
+            f_df = self.df_forecast[self.df_forecast['Well_No'].astype(str).str.strip().str.lower() == wno_norm]
+        elif village:
+            v_norm = village.lower().strip()
+            # Historical and forecast profile
+            h_df = self.df_historical[self.df_historical['Village'].str.lower() == v_norm]
+            f_df = self.df_forecast[self.df_forecast['Village'].str.lower() == v_norm]
 
-        # Forecast profile
-        f_df = self.df_forecast[self.df_forecast['Village'].str.lower() == v_norm]
-        if len(f_df) == 0 and taluk:
-            f_df = self.df_forecast[
-                (self.df_forecast['Village'].str.lower().str.contains(v_norm)) &
-                (self.df_forecast['Taluk'].str.lower() == taluk.lower())
-            ]
+            # If not found, try common transliteration variants (e.g. Varichiur <-> Varichiyur)
+            if len(h_df) == 0 and len(f_df) == 0:
+                alias = v_norm.replace('iur', 'iyur') if 'iur' in v_norm else v_norm.replace('iyur', 'iur')
+                h_df = self.df_historical[self.df_historical['Village'].str.lower() == alias]
+                f_df = self.df_forecast[self.df_forecast['Village'].str.lower() == alias]
+
+            if len(h_df) == 0 and len(f_df) == 0 and taluk:
+                h_df = self.df_historical[
+                    (self.df_historical['Village'].str.lower().str.contains(v_norm[:5])) &
+                    (self.df_historical['Taluk'].str.lower() == taluk.lower())
+                ]
+                f_df = self.df_forecast[
+                    (self.df_forecast['Village'].str.lower().str.contains(v_norm[:5])) &
+                    (self.df_forecast['Taluk'].str.lower() == taluk.lower())
+                ]
+            elif len(h_df) == 0 and len(f_df) == 0:
+                h_df = self.df_historical[self.df_historical['Village'].str.lower().str.contains(v_norm[:5])]
+                f_df = self.df_forecast[self.df_forecast['Village'].str.lower().str.contains(v_norm[:5])]
+        else:
+            return None
 
         coords = None
-        well_no = None
+        out_well_no = well_no
         actual_taluk = None
         actual_village = village
 
         if len(f_df) > 0:
             first_f = f_df.iloc[0]
             actual_taluk = first_f['Taluk']
-            actual_village = first_f['Village']
-            well_no = first_f['Well_No']
+            actual_village = village if village else first_f['Village']
+            out_well_no = first_f['Well_No']
             if pd.notnull(first_f['Latitude']) and pd.notnull(first_f['Longitude']):
                 coords = [float(first_f['Longitude']), float(first_f['Latitude'])]
 
         if coords is None and len(h_df) > 0:
             first_h = h_df.iloc[0]
             actual_taluk = first_h['Taluk']
-            actual_village = first_h['Village']
-            well_no = first_h['Well_No']
+            actual_village = village if village else first_h['Village']
+            out_well_no = first_h['Well_No']
             if pd.notnull(first_h['Latitude']) and pd.notnull(first_h['Longitude']):
                 coords = [float(first_h['Longitude']), float(first_h['Latitude'])]
 
         return {
             'village': actual_village,
             'taluk': actual_taluk,
-            'well_no': well_no,
+            'well_no': out_well_no,
             'coordinates': coords,
             'historical_count': len(h_df),
             'historical_series': h_df.sort_values('Year').to_dict(orient='records'),
@@ -426,13 +442,14 @@ class DataService:
             source_df = self.df_forecast if is_forecast else self.df_historical
             year_df = source_df[source_df['Year'] == int(year)]
 
-            # Map station records by (Taluk.lower(), Village.lower())
+            # Map station records primarily by Well_No
             rec_map = {}
             for r in year_df.to_dict(orient='records'):
-                k1 = (r.get('Taluk', '').strip().lower(), r.get('Village', '').strip().lower())
-                rec_map[k1] = r
                 if r.get('Well_No'):
                     rec_map[str(r['Well_No']).strip().lower()] = r
+                k1 = (r.get('Taluk', '').strip().lower(), r.get('Village', '').strip().lower())
+                if k1 not in rec_map:
+                    rec_map[k1] = r
 
             enriched_features = []
             for feat in self.stations_geojson.get('features', []):
@@ -444,9 +461,10 @@ class DataService:
                 p = new_f['properties']
                 t_key = p.get('Taluk', '').strip().lower()
                 v_key = p.get('Village', '').strip().lower()
-                w_key = str(p.get('Well_No', '')).strip().lower()
+                w_key = str(p.get('Well_No', '') or p.get('Well No', '')).strip().lower()
 
-                matched_r = rec_map.get((t_key, v_key)) or rec_map.get(w_key)
+                # Prioritize Well_No match first to prevent village-level merging!
+                matched_r = rec_map.get(w_key) or rec_map.get((t_key, v_key))
                 if matched_r:
                     ass = evaluate_combined_vulnerability(matched_r)
                     p['Year'] = int(year)

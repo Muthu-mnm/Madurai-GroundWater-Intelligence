@@ -15,7 +15,7 @@ class TestForecastIntervals(unittest.TestCase):
 
     def test_forecast_dataset_loaded(self):
         self.assertGreater(len(self.df), 1000)
-        self.assertEqual(len(self.df), 1386)
+        self.assertEqual(len(self.df), 1494)  # 166 verified monitoring wells * 9 forecast years (2022-2030)
 
     def test_lower_point_upper_interval_ordering_tds(self):
         """Verify TDS Lower CI <= Point <= Upper CI for all records."""

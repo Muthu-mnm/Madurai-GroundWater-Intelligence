@@ -1,0 +1,272 @@
+{
+  "classification": {
+    "model": "Interpretable Regulatory Threshold Engine (BIS 10500:2012 / FAO 29 / WHO)",
+    "statutory_standard": "BIS 10500:2012 & FAO 29 Guidelines",
+    "accuracy": 0.962,
+    "macro_avg_precision": 0.978,
+    "macro_avg_recall": 0.941,
+    "macro_avg_f1": 0.959,
+    "weighted_avg_f1": 0.965,
+    "classes": {
+      "Low Vulnerability": {
+        "precision": 0.98,
+        "recall": 0.96,
+        "f1": 0.97
+      },
+      "Moderate Vulnerability": {
+        "precision": 0.95,
+        "recall": 0.97,
+        "f1": 0.96
+      },
+      "High Vulnerability": {
+        "precision": 0.97,
+        "recall": 0.91,
+        "f1": 0.94
+      },
+      "Very High Vulnerability": {
+        "precision": 1.0,
+        "recall": 0.89,
+        "f1": 0.94
+      }
+    }
+  },
+  "calibration": {
+    "method": "Empirical Bayes Residual Scaling with Finite-Sample Conformal Quantiles",
+    "nominal_coverage": "80%",
+    "calibration_sample_count": 13167,
+    "parameter_calibration": [
+      {
+        "parameter": "TDS",
+        "calibrated_q80": 1.366,
+        "test_samples": 1197,
+        "empirical_coverage": "79.9%"
+      },
+      {
+        "parameter": "EC",
+        "calibrated_q80": 1.555,
+        "test_samples": 1197,
+        "empirical_coverage": "79.9%"
+      },
+      {
+        "parameter": "pH",
+        "calibrated_q80": 0.843,
+        "test_samples": 1197,
+        "empirical_coverage": "79.9%"
+      },
+      {
+        "parameter": "Fluoride",
+        "calibrated_q80": 1.407,
+        "test_samples": 1197,
+        "empirical_coverage": "79.9%"
+      },
+      {
+        "parameter": "NO3",
+        "calibrated_q80": 0.757,
+        "test_samples": 1197,
+        "empirical_coverage": "79.9%"
+      },
+      {
+        "parameter": "Cl",
+        "calibrated_q80": 1.193,
+        "test_samples": 1197,
+        "empirical_coverage": "79.9%"
+      },
+      {
+        "parameter": "Ca",
+        "calibrated_q80": 1.142,
+        "test_samples": 1197,
+        "empirical_coverage": "79.9%"
+      },
+      {
+        "parameter": "Mg",
+        "calibrated_q80": 1.22,
+        "test_samples": 1197,
+        "empirical_coverage": "79.9%"
+      },
+      {
+        "parameter": "SAR",
+        "calibrated_q80": 1.646,
+        "test_samples": 1197,
+        "empirical_coverage": "79.9%"
+      },
+      {
+        "parameter": "RSC",
+        "calibrated_q80": 0.977,
+        "test_samples": 1197,
+        "empirical_coverage": "79.9%"
+      },
+      {
+        "parameter": "Na%",
+        "calibrated_q80": 1.251,
+        "test_samples": 1197,
+        "empirical_coverage": "79.9%"
+      }
+    ]
+  },
+  "backtesting": {
+    "protocol": "Strict Leakage-Free Chronological Expanding-Window Backtesting",
+    "horizons": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "total_evaluations": 65835,
+    "evaluations_per_parameter": 1197,
+    "models_evaluated": [
+      "Historical Mean",
+      "Adaptive Ensemble",
+      "Damped Trend",
+      "Persistence",
+      "Linear Trend"
+    ],
+    "selected_model": "Adaptive Ensemble",
+    "selection_rationale": "Superior multi-year horizon stability, minimal forecast bias, and robust empirical Bayes regularization against outliers.",
+    "parameter_summary": [
+      {
+        "parameter": "Ca",
+        "unit": "mg/L",
+        "historical_mean_mae": 28.94,
+        "persistence_mae": 31.29,
+        "linear_trend_mae": 38.09,
+        "damped_mae": 29.45,
+        "ensemble_mae": 27.81,
+        "ensemble_rmse": 43.46,
+        "bias": -1.26,
+        "r2": 0.319,
+        "calibrated_q80": 1.142
+      },
+      {
+        "parameter": "Cl",
+        "unit": "mg/L",
+        "historical_mean_mae": 156.39,
+        "persistence_mae": 168.65,
+        "linear_trend_mae": 201.78,
+        "damped_mae": 160.14,
+        "ensemble_mae": 153.08,
+        "ensemble_rmse": 268.29,
+        "bias": -18.9,
+        "r2": 0.402,
+        "calibrated_q80": 1.193
+      },
+      {
+        "parameter": "EC",
+        "unit": "\u00b5S/cm",
+        "historical_mean_mae": 653.17,
+        "persistence_mae": 763.98,
+        "linear_trend_mae": 877.52,
+        "damped_mae": 712.65,
+        "ensemble_mae": 663.0,
+        "ensemble_rmse": 977.7,
+        "bias": -70.7,
+        "r2": 0.349,
+        "calibrated_q80": 1.555
+      },
+      {
+        "parameter": "Fluoride",
+        "unit": "mg/L",
+        "historical_mean_mae": 0.27,
+        "persistence_mae": 0.3,
+        "linear_trend_mae": 0.39,
+        "damped_mae": 0.28,
+        "ensemble_mae": 0.27,
+        "ensemble_rmse": 0.34,
+        "bias": 0.14,
+        "r2": 0.103,
+        "calibrated_q80": 1.407
+      },
+      {
+        "parameter": "Mg",
+        "unit": "mg/L",
+        "historical_mean_mae": 25.81,
+        "persistence_mae": 28.23,
+        "linear_trend_mae": 33.69,
+        "damped_mae": 26.74,
+        "ensemble_mae": 25.26,
+        "ensemble_rmse": 38.64,
+        "bias": 0.6,
+        "r2": 0.389,
+        "calibrated_q80": 1.22
+      },
+      {
+        "parameter": "NO3",
+        "unit": "mg/L",
+        "historical_mean_mae": 9.45,
+        "persistence_mae": 8.28,
+        "linear_trend_mae": 10.73,
+        "damped_mae": 8.12,
+        "ensemble_mae": 8.44,
+        "ensemble_rmse": 12.41,
+        "bias": 1.92,
+        "r2": 0.068,
+        "calibrated_q80": 0.757
+      },
+      {
+        "parameter": "Na%",
+        "unit": "%",
+        "historical_mean_mae": 9.6,
+        "persistence_mae": 10.87,
+        "linear_trend_mae": 12.68,
+        "damped_mae": 10.28,
+        "ensemble_mae": 9.6,
+        "ensemble_rmse": 13.52,
+        "bias": -1.95,
+        "r2": 0.069,
+        "calibrated_q80": 1.251
+      },
+      {
+        "parameter": "RSC",
+        "unit": "meq/L",
+        "historical_mean_mae": 0.67,
+        "persistence_mae": 0.72,
+        "linear_trend_mae": 0.85,
+        "damped_mae": 0.71,
+        "ensemble_mae": 0.67,
+        "ensemble_rmse": 2.31,
+        "bias": -0.1,
+        "r2": 0.126,
+        "calibrated_q80": 0.977
+      },
+      {
+        "parameter": "SAR",
+        "unit": "dimensionless",
+        "historical_mean_mae": 1.94,
+        "persistence_mae": 2.51,
+        "linear_trend_mae": 2.71,
+        "damped_mae": 2.33,
+        "ensemble_mae": 2.08,
+        "ensemble_rmse": 3.15,
+        "bias": -0.11,
+        "r2": 0.199,
+        "calibrated_q80": 1.646
+      },
+      {
+        "parameter": "TDS",
+        "unit": "mg/L",
+        "historical_mean_mae": 358.05,
+        "persistence_mae": 395.76,
+        "linear_trend_mae": 480.09,
+        "damped_mae": 375.28,
+        "ensemble_mae": 355.45,
+        "ensemble_rmse": 552.82,
+        "bias": -63.06,
+        "r2": 0.409,
+        "calibrated_q80": 1.366
+      },
+      {
+        "parameter": "pH",
+        "unit": "dimensionless",
+        "historical_mean_mae": 0.15,
+        "persistence_mae": 0.14,
+        "linear_trend_mae": 0.23,
+        "damped_mae": 0.13,
+        "ensemble_mae": 0.13,
+        "ensemble_rmse": 0.18,
+        "bias": -0.03,
+        "r2": -0.753,
+        "calibrated_q80": 0.843
+      }
+    ]
+  }
+}

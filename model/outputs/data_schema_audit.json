@@ -1,0 +1,590 @@
+{
+  "audit_metadata": {
+    "audit_timestamp": "2026-10-24T21:30:00+05:30",
+    "auditor": "Antigravity GroundWater Intelligence Forecaster Engine",
+    "status": "PASSED_WITH_DATA_REPAIRS"
+  },
+  "data_sources": {
+    "raw_source_excel": {
+      "filepath": "model\\raw_data\\Water Quality data_ Madurai district (2007-2021).xlsx",
+      "sha256": "b2d2d84b4af3b7c9089278fac110cbe2d74c468db1fe4055f9f7b91eb9a8e3df",
+      "total_rows": 2059,
+      "total_columns": 24,
+      "columns": [
+        "Well No",
+        "District",
+        "Tahsil / Taluk",
+        "Village",
+        "Latitude",
+        "Longitude",
+        "Date of collection",
+        "TDS",
+        "NO2+NO3",
+        "Ca",
+        "Mg",
+        "Na",
+        "K",
+        "Cl",
+        "SO4",
+        "CO3",
+        "HCO3",
+        "F",
+        "pH_GEN",
+        "EC_GEN",
+        "HAR_Total",
+        "SAR",
+        "RSC",
+        "Na%"
+      ]
+    },
+    "canonical_source_csv": {
+      "filepath": "data\\historical_groundwater_2007_2021.csv",
+      "sha256": "3afbb43e6cb69e5a0b4537e625e70d04a67e1e21d51aa86ea65bc22449758f49",
+      "total_rows": 2059,
+      "total_columns": 30,
+      "columns": [
+        "Well_No",
+        "District",
+        "Taluk",
+        "Village",
+        "Date",
+        "Year",
+        "Month",
+        "Season",
+        "Latitude",
+        "Longitude",
+        "TDS",
+        "EC",
+        "pH",
+        "Fluoride",
+        "NO3",
+        "Ca",
+        "Mg",
+        "Na",
+        "K",
+        "Cl",
+        "SO4",
+        "CO3",
+        "HCO3",
+        "HAR_Total",
+        "SAR",
+        "RSC",
+        "Na%",
+        "Risk_Level",
+        "Drinking_Suitability",
+        "Water_Quality_Status"
+      ]
+    },
+    "spatial_reference_geojson": {
+      "filepath": "data\\madurai_wells.geojson",
+      "total_features": 166,
+      "verified_wells": 166
+    }
+  },
+  "canonical_schema_mapping": [
+    {
+      "canonical_name": "Well_No",
+      "raw_column": "Well No",
+      "data_type": "string",
+      "nature": "Station Identifier",
+      "unit": "N/A",
+      "notes": "Primary key; stripped of whitespace to resolve 225 raw variants to exactly 166 verified wells."
+    },
+    {
+      "canonical_name": "District",
+      "raw_column": "District",
+      "data_type": "string",
+      "nature": "Administrative Metadata",
+      "unit": "N/A",
+      "notes": "Madurai District."
+    },
+    {
+      "canonical_name": "Taluk",
+      "raw_column": "Tahsil / Taluk",
+      "data_type": "string",
+      "nature": "Administrative Metadata",
+      "unit": "N/A",
+      "notes": "7 administrative taluks in unified district layer (Madurai North, Madurai South, Madurai East, Melur, Thirumangalam, Usilampatti, Vadipatti). 85 missing values in raw filled from GIS well lookup."
+    },
+    {
+      "canonical_name": "Village",
+      "raw_column": "Village",
+      "data_type": "string",
+      "nature": "Administrative Metadata",
+      "unit": "N/A",
+      "notes": "Revenue village containing the monitoring well. 31 villages have multiple distinct monitoring wells."
+    },
+    {
+      "canonical_name": "Date",
+      "raw_column": "Date of collection",
+      "data_type": "date (YYYY-MM-DD)",
+      "nature": "Temporal Metadata",
+      "unit": "N/A",
+      "notes": "Sampling date."
+    },
+    {
+      "canonical_name": "Year",
+      "raw_column": "Derived from Date",
+      "data_type": "integer",
+      "nature": "Temporal Metadata",
+      "unit": "N/A",
+      "notes": "Observation year covering 2007 through 2021."
+    },
+    {
+      "canonical_name": "Month",
+      "raw_column": "Derived from Date",
+      "data_type": "integer",
+      "nature": "Temporal Metadata",
+      "unit": "N/A",
+      "notes": "Month of sampling round (chiefly July pre-monsoon and January post-monsoon)."
+    },
+    {
+      "canonical_name": "Season",
+      "raw_column": "Derived from Month",
+      "data_type": "string",
+      "nature": "Temporal Metadata",
+      "unit": "N/A",
+      "notes": "Pre-monsoon or Post-monsoon."
+    },
+    {
+      "canonical_name": "Latitude",
+      "raw_column": "Latitude",
+      "data_type": "float",
+      "nature": "Spatial Coordinate",
+      "unit": "Decimal Degrees",
+      "notes": "187 missing coordinates in raw file cross-referenced and resolved from madurai_wells.geojson surveyed GPS."
+    },
+    {
+      "canonical_name": "Longitude",
+      "raw_column": "Longitude",
+      "data_type": "float",
+      "nature": "Spatial Coordinate",
+      "unit": "Decimal Degrees",
+      "notes": "187 missing coordinates in raw file cross-referenced and resolved from madurai_wells.geojson surveyed GPS."
+    },
+    {
+      "canonical_name": "TDS",
+      "raw_column": "TDS",
+      "data_type": "float",
+      "nature": "Measured Continuous Target",
+      "unit": "mg/L",
+      "notes": "Total Dissolved Solids gravimetric measurement."
+    },
+    {
+      "canonical_name": "EC",
+      "raw_column": "EC_GEN",
+      "data_type": "float",
+      "nature": "Measured Continuous Target",
+      "unit": "\u00b5S/cm",
+      "notes": "Electrical Conductivity at 25\u00b0C."
+    },
+    {
+      "canonical_name": "pH",
+      "raw_column": "pH_GEN",
+      "data_type": "float",
+      "nature": "Measured Continuous Target",
+      "unit": "dimensionless",
+      "notes": "Sorensen pH scale bounded strictly within [0, 14]."
+    },
+    {
+      "canonical_name": "Fluoride",
+      "raw_column": "F",
+      "data_type": "float",
+      "nature": "Measured Continuous Target",
+      "unit": "mg/L",
+      "notes": "Fluoride ion concentration."
+    },
+    {
+      "canonical_name": "NO3",
+      "raw_column": "NO2+NO3",
+      "data_type": "float",
+      "nature": "Measured Continuous Target",
+      "unit": "mg/L",
+      "notes": "Total nitrate expressed as NO3 (15 raw missing values filled from median well baseline)."
+    },
+    {
+      "canonical_name": "Ca",
+      "raw_column": "Ca",
+      "data_type": "float",
+      "nature": "Measured Continuous Target",
+      "unit": "mg/L",
+      "notes": "Calcium ion concentration."
+    },
+    {
+      "canonical_name": "Mg",
+      "raw_column": "Mg",
+      "data_type": "float",
+      "nature": "Measured Continuous Target",
+      "unit": "mg/L",
+      "notes": "Magnesium ion concentration."
+    },
+    {
+      "canonical_name": "Na",
+      "raw_column": "Na",
+      "data_type": "float",
+      "nature": "Measured Intermediate Feature",
+      "unit": "mg/L",
+      "notes": "Sodium cation concentration."
+    },
+    {
+      "canonical_name": "K",
+      "raw_column": "K",
+      "data_type": "float",
+      "nature": "Measured Intermediate Feature",
+      "unit": "mg/L",
+      "notes": "Potassium cation concentration."
+    },
+    {
+      "canonical_name": "Cl",
+      "raw_column": "Cl",
+      "data_type": "float",
+      "nature": "Measured Continuous Target",
+      "unit": "mg/L",
+      "notes": "Chloride anion concentration."
+    },
+    {
+      "canonical_name": "SO4",
+      "raw_column": "SO4",
+      "data_type": "float",
+      "nature": "Measured Intermediate Feature",
+      "unit": "mg/L",
+      "notes": "Sulphate anion concentration."
+    },
+    {
+      "canonical_name": "CO3",
+      "raw_column": "CO3",
+      "data_type": "float",
+      "nature": "Measured Intermediate Feature",
+      "unit": "mg/L",
+      "notes": "Carbonate alkalinity."
+    },
+    {
+      "canonical_name": "HCO3",
+      "raw_column": "HCO3",
+      "data_type": "float",
+      "nature": "Measured Intermediate Feature",
+      "unit": "mg/L",
+      "notes": "Bicarbonate alkalinity."
+    },
+    {
+      "canonical_name": "HAR_Total",
+      "raw_column": "HAR_Total",
+      "data_type": "float",
+      "nature": "Calculated Index",
+      "unit": "mg/L as CaCO3",
+      "notes": "Total Hardness calculated as 2.497*Ca + 4.118*Mg."
+    },
+    {
+      "canonical_name": "SAR",
+      "raw_column": "SAR",
+      "data_type": "float",
+      "nature": "Calculated Target / Index",
+      "unit": "dimensionless ratio",
+      "notes": "Sodium Adsorption Ratio calculated as Na / sqrt((Ca+Mg)/2) in meq/L."
+    },
+    {
+      "canonical_name": "RSC",
+      "raw_column": "RSC",
+      "data_type": "float",
+      "nature": "Calculated Target / Index",
+      "unit": "meq/L",
+      "notes": "Residual Sodium Carbonate calculated as (CO3 + HCO3) - (Ca + Mg) in meq/L."
+    },
+    {
+      "canonical_name": "Na%",
+      "raw_column": "Na%",
+      "data_type": "float",
+      "nature": "Calculated Target / Index",
+      "unit": "%",
+      "notes": "Sodium percentage calculated as Na / (Ca + Mg + Na + K) * 100 in meq/L."
+    },
+    {
+      "canonical_name": "Risk_Level",
+      "raw_column": "Derived Label",
+      "data_type": "string",
+      "nature": "Historical Regulatory Screening",
+      "unit": "class",
+      "notes": "Rule-based compliance tier under BIS 10500:2012."
+    },
+    {
+      "canonical_name": "Drinking_Suitability",
+      "raw_column": "Derived Label",
+      "data_type": "string",
+      "nature": "Historical Screening Category",
+      "unit": "category",
+      "notes": "Drinking potability screening indicator."
+    },
+    {
+      "canonical_name": "Water_Quality_Status",
+      "raw_column": "Derived Label",
+      "data_type": "string",
+      "nature": "Historical Screening Category",
+      "unit": "category",
+      "notes": "Compliance status under Indian drinking standards."
+    }
+  ],
+  "target_statistics": {
+    "TDS": {
+      "count": 2059,
+      "missing": 0,
+      "min": 15.0,
+      "mean": 965.826,
+      "max": 7343.0,
+      "std": 721.884,
+      "unit": "mg/L"
+    },
+    "EC": {
+      "count": 2059,
+      "missing": 0,
+      "min": 55.0,
+      "mean": 1632.883,
+      "max": 11650.0,
+      "std": 1231.725,
+      "unit": "\u00b5S/cm"
+    },
+    "pH": {
+      "count": 2059,
+      "missing": 0,
+      "min": 6.5,
+      "mean": 8.042,
+      "max": 8.9,
+      "std": 0.303,
+      "unit": "dimensionless"
+    },
+    "Fluoride": {
+      "count": 2059,
+      "missing": 0,
+      "min": 0.05,
+      "mean": 0.788,
+      "max": 2.8,
+      "std": 0.415,
+      "unit": "mg/L"
+    },
+    "NO3": {
+      "count": 2059,
+      "missing": 0,
+      "min": 0.05,
+      "mean": 16.028,
+      "max": 360.0,
+      "std": 22.64,
+      "unit": "mg/L"
+    },
+    "Cl": {
+      "count": 2059,
+      "missing": 0,
+      "min": 7.0,
+      "mean": 292.191,
+      "max": 3545.0,
+      "std": 346.087,
+      "unit": "mg/L"
+    },
+    "Ca": {
+      "count": 2059,
+      "missing": 0,
+      "min": 2.0,
+      "mean": 67.369,
+      "max": 1000.0,
+      "std": 63.205,
+      "unit": "mg/L"
+    },
+    "Mg": {
+      "count": 2059,
+      "missing": 0,
+      "min": 2.43,
+      "mean": 66.568,
+      "max": 631.8,
+      "std": 51.882,
+      "unit": "mg/L"
+    },
+    "SAR": {
+      "count": 2059,
+      "missing": 0,
+      "min": 0.0,
+      "mean": 3.621,
+      "max": 50.04,
+      "std": 3.642,
+      "unit": "dimensionless"
+    },
+    "RSC": {
+      "count": 2059,
+      "missing": 0,
+      "min": 0.0,
+      "mean": 0.599,
+      "max": 69.296,
+      "std": 2.175,
+      "unit": "meq/L"
+    },
+    "Na%": {
+      "count": 2059,
+      "missing": 0,
+      "min": 0.265,
+      "mean": 42.788,
+      "max": 95.998,
+      "std": 16.665,
+      "unit": "%"
+    }
+  },
+  "temporal_coverage": {
+    "min_year": 2007,
+    "max_year": 2021,
+    "total_observed_years": 15,
+    "latest_actual_observation_year": 2021,
+    "forecast_start_year": 2022,
+    "forecast_end_year": 2030,
+    "forecast_horizons": 9,
+    "unverified_retrospective_years": [
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "prospective_forecast_years": [
+      2026,
+      2027,
+      2028,
+      2029,
+      2030
+    ]
+  },
+  "spatial_and_station_identity": {
+    "unique_monitoring_wells_count": 166,
+    "unique_villages_count": 154,
+    "unique_taluks_count": 7,
+    "villages_with_multiple_wells_count": 31,
+    "villages_with_multiple_wells": {
+      "Alanganallur": 2,
+      "Attukulam": 2,
+      "Chettikulam": 2,
+      "Chinnakattalai": 2,
+      "Chittampatti": 2,
+      "Chokkanathapuram": 2,
+      "Elamanur": 2,
+      "Kalikappan": 2,
+      "Kalimangalam": 2,
+      "Kallikudi": 2,
+      "Kappalur": 2,
+      "Mangulam": 2,
+      "Nagari": 2,
+      "Nallur": 2,
+      "Nilaiyur": 2,
+      "Peikulam": 2,
+      "Pottapatty": 2,
+      "Pulipatti": 2,
+      "Pullaneri": 2,
+      "Sakkilipatti": 2,
+      "Sangampatti": 2,
+      "Saptur": 2,
+      "Sedapatti": 2,
+      "Thangalacheri": 2,
+      "Thathampatti": 2,
+      "Thiruparankundram": 2,
+      "Thiruvedagam": 2,
+      "Thumbalapatti": 2,
+      "Uthappanaickanur": 2,
+      "Varichiyur": 2,
+      "Vayalur": 2
+    },
+    "root_cause_identity_flaw": "Previous pipeline grouped by [Taluk, Village, Year], collapsing 31 villages with multiple monitoring wells into synthetic village averages. This destroyed independent well histories and selected wrong stations via village fallback matching.",
+    "correction_implemented": "Primary training and forecasting identity established as Well_No + Year, preserving all 166 physical monitoring wells independently."
+  },
+  "domain_parameter_coverage": {
+    "water_quality_vulnerability": {
+      "core_required_parameters": [
+        "TDS",
+        "EC",
+        "Fluoride",
+        "pH"
+      ],
+      "additional_verified_parameters": [
+        "NO3",
+        "Cl",
+        "Ca",
+        "Mg"
+      ],
+      "status": "Fully Supported (8/8 parameters available with 2059 observations)"
+    },
+    "agriculture_vulnerability": {
+      "core_required_parameters": [
+        "EC",
+        "pH"
+      ],
+      "irrigation_indices": [
+        "SAR",
+        "RSC",
+        "Na%",
+        "TDS"
+      ],
+      "status": "Fully Supported (6/6 parameters available with 2059 observations)"
+    },
+    "health_vulnerability": {
+      "toxic_contaminants": [
+        "Fluoride",
+        "NO3"
+      ],
+      "water_chemistry_hazards": [
+        "TDS",
+        "pH",
+        "Cl"
+      ],
+      "status": "Fully Supported as chemical contaminant exposure screening (5/5 parameters available with 2059 observations)"
+    },
+    "combined_vulnerability": {
+      "contributing_domains": [
+        "Water Quality",
+        "Agriculture",
+        "Health"
+      ],
+      "severity_rule": "Non-masking protective override (severe toxic risk cannot be masked or diluted by low risk in other domains)",
+      "status": "Fully Supported"
+    }
+  },
+  "field_nature_classification": {
+    "measured_observations": [
+      "TDS",
+      "EC",
+      "pH",
+      "Fluoride",
+      "NO3",
+      "Ca",
+      "Mg",
+      "Na",
+      "K",
+      "Cl",
+      "SO4",
+      "CO3",
+      "HCO3"
+    ],
+    "scientifically_calculated_features": [
+      "HAR_Total",
+      "SAR",
+      "RSC",
+      "Na%"
+    ],
+    "forecast_targets": [
+      "TDS",
+      "EC",
+      "pH",
+      "Fluoride",
+      "NO3",
+      "Cl",
+      "Ca",
+      "Mg",
+      "SAR",
+      "RSC",
+      "Na%"
+    ],
+    "derived_rule_based_risk_classes": [
+      "Water Quality Vulnerability",
+      "Agriculture Vulnerability",
+      "Health Vulnerability",
+      "Combined Vulnerability"
+    ],
+    "precomputed_forecasts": "2022-2030 predictions generated strictly from models fitted on genuine 2007-2021 well observations; not used as historical training data."
+  },
+  "unresolved_issues_and_limitations": [
+    "Supplied PDF was not present in repository workspace; methodology strictly executed according to BIS 10500:2012, FAO 29 / IS 11624, WHO 2017 guidelines, and the verified repository hydrochemical dataset.",
+    "No actual ground monitoring samples exist in the repository for years 2022-2026. Therefore, predictions for 2022-2025 are explicitly identified as unverified retrospective projections.",
+    "Health domain is strictly a chemical contaminant exposure screening tool, not a clinical diagnostic or disease incidence predictor.",
+    "Boiling water does NOT eliminate chemical contaminants (fluoride, nitrate, salinity) and must never be prescribed for chemical exceedances."
+  ]
+}
