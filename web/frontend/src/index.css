@@ -703,6 +703,20 @@ html, body {
   transition: r 0.15s ease, stroke-width 0.15s ease;
 }
 
+/* Inverted Outer Mask Layer (Covers areas outside Madurai without blocking map gestures) */
+.leaflet-pane.maskPane-pane,
+.leaflet-pane.leaflet-maskPane-pane,
+.leaflet-pane.maskPane-pane path,
+.leaflet-pane.leaflet-maskPane-pane path {
+  pointer-events: none !important;
+}
+
+/* Clean Cartographic Soft Shadow on District Boundary for Light Theme */
+.leaflet-pane.districtPane-pane path,
+.leaflet-pane.leaflet-districtPane-pane path {
+  filter: drop-shadow(0 2px 8px rgba(15, 23, 42, 0.14)) drop-shadow(0 1px 3px rgba(15, 23, 42, 0.08));
+}
+
 /* Map Floating Overlays */
 .map-floating-panel {
   position: absolute;

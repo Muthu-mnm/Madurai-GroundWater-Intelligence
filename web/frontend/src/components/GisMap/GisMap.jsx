@@ -53,6 +53,16 @@ export default function GisMap({
   const [surfaceOpacity, setSurfaceOpacity] = useState(0.55);
   const [showTalukBoundaries, setShowTalukBoundaries] = useState(true);
   const [showStationMarkers, setShowStationMarkers] = useState(true);
+  const [maduraiOnly, setMaduraiOnly] = useState(true);
+
+  // Map Backdrop Presets (Curated soothing light themes for maximum visual comfort)
+  const BACKDROP_PRESETS = {
+    'alabaster': { label: 'Soft Alabaster (Pleasant Light)', hex: '#FAF9F6' },
+    'porcelain': { label: 'Pure White (Clean Studio)', hex: '#FFFFFF' },
+    'ivory': { label: 'Warm Ivory (Zero Glare)', hex: '#F7F6F2' },
+    'mist': { label: 'Cool Studio Mist', hex: '#F1F5F9' }
+  };
+  const [backdropColor, setBackdropColor] = useState('alabaster');
 
   // Inspector Modal State
   const [selectedStation, setSelectedStation] = useState(null);
@@ -162,14 +172,14 @@ export default function GisMap({
 
       L.control.zoom({ position: 'topright' }).addTo(map);
 
-      map.createPane('maskPane');
-      map.getPane('maskPane').style.zIndex = 250;
-
       map.createPane('surfacePane');
       map.getPane('surfacePane').style.zIndex = 300;
 
+      map.createPane('maskPane');
+      map.getPane('maskPane').style.zIndex = 340;
+
       map.createPane('districtPane');
-      map.getPane('districtPane').style.zIndex = 350;
+      map.getPane('districtPane').style.zIndex = 360;
 
       map.createPane('talukPane');
       map.getPane('talukPane').style.zIndex = 400;
@@ -206,7 +216,75 @@ export default function GisMap({
     tileLayerRef.current.bringToBack();
   }, [activeBasemap]);
 
-  // 3. District Boundary Line
+  // 3a. Inverted Mask GeoJSON: Hides all areas outside Madurai District
+  const maskGeoJson = useMemo(() => {
+    if (!districtGeo) return null;
+
+    let rings = [];
+    if (districtGeo.type === 'FeatureCollection' && districtGeo.features) {
+      districtGeo.features.forEach(f => {
+        if (f.geometry && f.geometry.type === 'Polygon') {
+          rings.push(f.geometry.coordinates[0]);
+        } else if (f.geometry && f.geometry.type === 'MultiPolygon') {
+          f.geometry.coordinates.forEach(poly => rings.push(poly[0]));
+        }
+      });
+    } else if (districtGeo.type === 'Feature' && districtGeo.geometry) {
+      if (districtGeo.geometry.type === 'Polygon') {
+        rings.push(districtGeo.geometry.coordinates[0]);
+      } else if (districtGeo.geometry.type === 'MultiPolygon') {
+        districtGeo.geometry.coordinates.forEach(poly => rings.push(poly[0]));
+      }
+    }
+
+    if (rings.length === 0) return null;
+
+    // Outer world boundary (Web Mercator extent lng, lat)
+    const worldOuter = [
+      [-180.0, -85.0511],
+      [180.0, -85.0511],
+      [180.0, 85.0511],
+      [-180.0, 85.0511],
+      [-180.0, -85.0511]
+    ];
+
+    return {
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'Polygon',
+        coordinates: [worldOuter, ...rings]
+      }
+    };
+  }, [districtGeo]);
+
+  // 3b. Render Mask Layer (Keeps only Madurai Map, hides surrounding districts)
+  useEffect(() => {
+    if (!mapInst.current) return;
+
+    if (maskLayerRef.current) {
+      mapInst.current.removeLayer(maskLayerRef.current);
+      maskLayerRef.current = null;
+    }
+
+    if (!maduraiOnly || !maskGeoJson) return;
+
+    const activeBackdropHex = BACKDROP_PRESETS[backdropColor]?.hex || '#FAF9F6';
+
+    maskLayerRef.current = L.geoJSON(maskGeoJson, {
+      pane: 'maskPane',
+      interactive: false,
+      style: {
+        fillColor: activeBackdropHex,
+        fillOpacity: 1.0,
+        color: activeBackdropHex,
+        weight: 0,
+        opacity: 0
+      }
+    }).addTo(mapInst.current);
+  }, [maskGeoJson, maduraiOnly, backdropColor]);
+
+  // 3c. District Boundary Outline (Clean forest teal border with subtle paper shadow)
   useEffect(() => {
     if (!mapInst.current || !districtGeo) return;
     if (districtLayerRef.current) {
@@ -217,16 +295,17 @@ export default function GisMap({
     districtLayerRef.current = L.geoJSON(districtGeo, {
       pane: 'districtPane',
       style: {
-        color: '#0f766e',
-        weight: 3.0,
+        color: '#0f766e', // Deep rich forest teal - crisp and soothing against light background
+        weight: 2.5,
         opacity: 0.95,
         fill: false
       }
     }).addTo(mapInst.current);
 
     const bounds = districtLayerRef.current.getBounds();
-    mapInst.current.fitBounds(bounds, { padding: [15, 15] });
-    mapInst.current.setMaxBounds(bounds.pad(0.35));
+    mapInst.current.fitBounds(bounds, { padding: [18, 18] });
+    mapInst.current.setMinZoom(9);
+    mapInst.current.setMaxBounds(bounds.pad(0.18));
   }, [districtGeo]);
 
   // 4. Continuous IDW Interpolation Raster Surface with Opacity
@@ -698,6 +777,36 @@ export default function GisMap({
             <span>{showStationMarkers ? 'Stations' : 'Stations'}</span>
           </button>
 
+          {/* Madurai Boundary Focus Mask Toggle (Keep only Madurai map) */}
+          <button
+            className={`btn btn-sm ${maduraiOnly ? 'btn-primary' : 'btn-secondary'}`}
+            style={{ fontSize: '0.75rem', padding: '3px 8px', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}
+            onClick={() => setMaduraiOnly(!maduraiOnly)}
+            title={maduraiOnly ? "Madurai District Map Only (Surrounding regions hidden)" : "Click to show all surrounding regions"}
+          >
+            <MapPin size={13} />
+            <span>{maduraiOnly ? 'Madurai Only' : 'Show All'}</span>
+          </button>
+
+          {/* Backdrop Color Preset Selector */}
+          {maduraiOnly && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', paddingLeft: '4px', borderLeft: '1px solid var(--border-light)' }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Backdrop:</span>
+              <select
+                className="form-control"
+                value={backdropColor}
+                onChange={(e) => setBackdropColor(e.target.value)}
+                style={{ fontSize: '0.75rem', padding: '2px 6px', width: '135px', height: '26px' }}
+                title="Select background canvas color around Madurai"
+              >
+                <option value="alabaster">Soft Alabaster</option>
+                <option value="porcelain">Pure White</option>
+                <option value="ivory">Warm Ivory</option>
+                <option value="mist">Cool Mist</option>
+              </select>
+            </div>
+          )}
+
           {/* Spatial Heatmap Toggle */}
           <button
             className={`btn btn-sm ${showSurface ? 'btn-primary' : 'btn-secondary'}`}
@@ -793,7 +902,14 @@ export default function GisMap({
       {/* MAP CANVAS CONTAINER */}
       <div 
         ref={mapContainerRef} 
-        style={{ flex: 1, width: '100%', height: '100%', minHeight: '520px', background: '#e2e8f0' }} 
+        style={{ 
+          flex: 1, 
+          width: '100%', 
+          height: '100%', 
+          minHeight: '520px', 
+          backgroundColor: maduraiOnly ? (BACKDROP_PRESETS[backdropColor]?.hex || '#FAF9F6') : '#FAF9F6',
+          transition: 'background-color 0.25s ease'
+        }} 
       />
 
 
